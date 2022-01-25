@@ -36,11 +36,11 @@
 #include <hb-ot.h>
 #include <freetype/ftmm.h>
 
-#define PANGO_TYPE_CAIRO_FC_FONT           (pango_vkvg_fc_font_get_type ())
-#define PANGO_CAIRO_FC_FONT(object)        (G_TYPE_CHECK_INSTANCE_CAST ((object), PANGO_TYPE_CAIRO_FC_FONT, PangoVkvgFcFont))
-#define PANGO_CAIRO_FC_FONT_CLASS(klass)   (G_TYPE_CHECK_CLASS_CAST ((klass), PANGO_TYPE_CAIRO_FC_FONT, PangoVkvgFcFontClass))
-#define PANGO_CAIRO_IS_FONT_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), PANGO_TYPE_CAIRO_FC_FONT))
-#define PANGO_CAIRO_FC_FONT_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), PANGO_TYPE_CAIRO_FC_FONT, PangoVkvgFcFontClass))
+#define PANGO_TYPE_VKVG_FC_FONT           (pango_vkvg_fc_font_get_type ())
+#define PANGO_VKVG_FC_FONT(object)        (G_TYPE_CHECK_INSTANCE_CAST ((object), PANGO_TYPE_VKVG_FC_FONT, PangoVkvgFcFont))
+#define PANGO_VKVG_FC_FONT_CLASS(klass)   (G_TYPE_CHECK_CLASS_CAST ((klass), PANGO_TYPE_VKVG_FC_FONT, PangoVkvgFcFontClass))
+#define PANGO_VKVG_IS_FONT_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), PANGO_TYPE_VKVG_FC_FONT))
+#define PANGO_VKVG_FC_FONT_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), PANGO_TYPE_VKVG_FC_FONT, PangoVkvgFcFontClass))
 
 typedef struct _PangoVkvgFcFont      PangoVkvgFcFont;
 typedef struct _PangoVkvgFcFontClass PangoVkvgFcFontClass;
@@ -100,7 +100,7 @@ vkvg_font_iface_init (PangoVkvgFontIface *iface)
 }
 
 G_DEFINE_TYPE_WITH_CODE (PangoVkvgFcFont, pango_vkvg_fc_font, PANGO_TYPE_FC_FONT,
-    { G_IMPLEMENT_INTERFACE (PANGO_TYPE_CAIRO_FONT, vkvg_font_iface_init) })
+    { G_IMPLEMENT_INTERFACE (PANGO_TYPE_VKVG_FONT, vkvg_font_iface_init) })
 
 static void
 pango_vkvg_fc_font_finalize (GObject *object)
@@ -238,10 +238,10 @@ _pango_vkvg_fc_font_new (PangoVkvgFcFontMap *cffontmap,
   int i;
   vkvg_font_options_t *options;
 
-  g_return_val_if_fail (PANGO_IS_CAIRO_FC_FONT_MAP (cffontmap), NULL);
+  g_return_val_if_fail (PANGO_IS_VKVG_FC_FONT_MAP (cffontmap), NULL);
   g_return_val_if_fail (pattern != NULL, NULL);
 
-  cffont = g_object_new (PANGO_TYPE_CAIRO_FC_FONT,
+  cffont = g_object_new (PANGO_TYPE_VKVG_FC_FONT,
 			 "pattern", pattern,
 			 "fontmap", cffontmap,
 			 NULL);

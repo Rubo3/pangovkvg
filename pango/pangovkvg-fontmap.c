@@ -60,7 +60,7 @@ pango_vkvg_font_map_default_init (PangoVkvgFontMapIface *iface)
  * `PangoVkvgFontMap` interfaces on the returned object.
  *
  * You can override the type of backend returned by using an
- * environment variable %PANGOCAIRO_BACKEND. Supported types,
+ * environment variable %PANGOVKVG_BACKEND. Supported types,
  * based on your build, are fc (fontconfig), win32, and coretext.
  * If requested type is not available, NULL is returned. Ie.
  * this is only useful for testing, when at least two backends
@@ -74,7 +74,7 @@ pango_vkvg_font_map_default_init (PangoVkvgFontMapIface *iface)
 PangoFontMap *
 pango_vkvg_font_map_new (void)
 {
-  const char *backend = getenv ("PANGOCAIRO_BACKEND");
+  const char *backend = getenv ("PANGOVKVG_BACKEND");
   if (backend && !*backend)
     backend = NULL;
 #if defined(HAVE_CORE_TEXT) && defined (HAVE_CAIRO_QUARTZ)
@@ -88,7 +88,7 @@ pango_vkvg_font_map_new (void)
 #if defined(HAVE_CAIRO_FREETYPE)
   if (!backend || 0 == strcmp (backend, "fc")
 	       || 0 == strcmp (backend, "fontconfig"))
-    return g_object_new (PANGO_TYPE_CAIRO_FC_FONT_MAP, NULL);
+    return g_object_new (PANGO_TYPE_VKVG_FC_FONT_MAP, NULL);
 #endif
   {
     const char backends[] = ""
@@ -102,7 +102,7 @@ pango_vkvg_font_map_new (void)
       " fontconfig"
 #endif
       ;
-    g_critical ("Unknown $PANGOCAIRO_BACKEND value.\n  Available backends are:%s", backends);
+    g_critical ("Unknown $PANGOVKVG_BACKEND value.\n  Available backends are:%s", backends);
   }
   return NULL;
 }
@@ -139,7 +139,7 @@ pango_vkvg_font_map_new_for_font_type (vkvg_font_type_t fonttype)
 #endif
 #if defined(HAVE_CAIRO_FREETYPE)
     case CAIRO_FONT_TYPE_FT:
-      return g_object_new (PANGO_TYPE_CAIRO_FC_FONT_MAP, NULL);
+      return g_object_new (PANGO_TYPE_VKVG_FC_FONT_MAP, NULL);
 #endif
     default:
       return NULL;
@@ -212,7 +212,7 @@ pango_vkvg_font_map_get_default (void)
 void
 pango_vkvg_font_map_set_default (PangoVkvgFontMap *fontmap)
 {
-  g_return_if_fail (fontmap == NULL || PANGO_IS_CAIRO_FONT_MAP (fontmap));
+  g_return_if_fail (fontmap == NULL || PANGO_IS_VKVG_FONT_MAP (fontmap));
 
   if (fontmap)
     g_object_ref (fontmap);
@@ -239,9 +239,9 @@ void
 pango_vkvg_font_map_set_resolution (PangoVkvgFontMap *fontmap,
                                      double             dpi)
 {
-  g_return_if_fail (PANGO_IS_CAIRO_FONT_MAP (fontmap));
+  g_return_if_fail (PANGO_IS_VKVG_FONT_MAP (fontmap));
 
-  (* PANGO_CAIRO_FONT_MAP_GET_IFACE (fontmap)->set_resolution) (fontmap, dpi);
+  (* PANGO_VKVG_FONT_MAP_GET_IFACE (fontmap)->set_resolution) (fontmap, dpi);
 }
 
 /**
@@ -259,9 +259,9 @@ pango_vkvg_font_map_set_resolution (PangoVkvgFontMap *fontmap,
 double
 pango_vkvg_font_map_get_resolution (PangoVkvgFontMap *fontmap)
 {
-  g_return_val_if_fail (PANGO_IS_CAIRO_FONT_MAP (fontmap), 96.);
+  g_return_val_if_fail (PANGO_IS_VKVG_FONT_MAP (fontmap), 96.);
 
-  return (* PANGO_CAIRO_FONT_MAP_GET_IFACE (fontmap)->get_resolution) (fontmap);
+  return (* PANGO_VKVG_FONT_MAP_GET_IFACE (fontmap)->get_resolution) (fontmap);
 }
 
 /**
@@ -279,7 +279,7 @@ pango_vkvg_font_map_get_resolution (PangoVkvgFontMap *fontmap)
 PangoContext *
 pango_vkvg_font_map_create_context (PangoVkvgFontMap *fontmap)
 {
-  g_return_val_if_fail (PANGO_IS_CAIRO_FONT_MAP (fontmap), NULL);
+  g_return_val_if_fail (PANGO_IS_VKVG_FONT_MAP (fontmap), NULL);
 
   return pango_font_map_create_context (PANGO_FONT_MAP (fontmap));
 }
@@ -297,7 +297,7 @@ pango_vkvg_font_map_create_context (PangoVkvgFontMap *fontmap)
 vkvg_font_type_t
 pango_vkvg_font_map_get_font_type (PangoVkvgFontMap *fontmap)
 {
-  g_return_val_if_fail (PANGO_IS_CAIRO_FONT_MAP (fontmap), CAIRO_FONT_TYPE_TOY);
+  g_return_val_if_fail (PANGO_IS_VKVG_FONT_MAP (fontmap), CAIRO_FONT_TYPE_TOY);
 
-  return (* PANGO_CAIRO_FONT_MAP_GET_IFACE (fontmap)->get_font_type) (fontmap);
+  return (* PANGO_VKVG_FONT_MAP_GET_IFACE (fontmap)->get_font_type) (fontmap);
 }

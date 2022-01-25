@@ -30,9 +30,9 @@
 
 typedef struct _PangoVkvgRendererClass PangoVkvgRendererClass;
 
-#define PANGO_CAIRO_RENDERER_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), PANGO_TYPE_CAIRO_RENDERER, PangoVkvgRendererClass))
-#define PANGO_IS_CAIRO_RENDERER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), PANGO_TYPE_CAIRO_RENDERER))
-#define PANGO_CAIRO_RENDERER_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), PANGO_TYPE_CAIRO_RENDERER, PangoVkvgRendererClass))
+#define PANGO_VKVG_RENDERER_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), PANGO_TYPE_VKVG_RENDERER, PangoVkvgRendererClass))
+#define PANGO_IS_VKVG_RENDERER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), PANGO_TYPE_VKVG_RENDERER))
+#define PANGO_VKVG_RENDERER_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), PANGO_TYPE_VKVG_RENDERER, PangoVkvgRendererClass))
 
 struct _PangoVkvgRenderer
 {
@@ -838,7 +838,7 @@ acquire_renderer (void)
     {
       if (G_UNLIKELY (!cached_renderer))
         {
-	  cached_renderer = g_object_new (PANGO_TYPE_CAIRO_RENDERER, NULL);
+	  cached_renderer = g_object_new (PANGO_TYPE_VKVG_RENDERER, NULL);
 	  cached_renderer->is_cached_renderer = TRUE;
 	}
 
@@ -846,7 +846,7 @@ acquire_renderer (void)
     }
   else
     {
-      renderer = g_object_new (PANGO_TYPE_CAIRO_RENDERER, NULL);
+      renderer = g_object_new (PANGO_TYPE_VKVG_RENDERER, NULL);
     }
 
   return renderer;

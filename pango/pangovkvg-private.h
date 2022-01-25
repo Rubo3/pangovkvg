@@ -19,8 +19,8 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#ifndef __PANGOCAIRO_PRIVATE_H__
-#define __PANGOCAIRO_PRIVATE_H__
+#ifndef __PANGOVKVG_PRIVATE_H__
+#define __PANGOVKVG_PRIVATE_H__
 
 #include <pango/pangovkvg.h>
 #include <pango/pango-renderer.h>
@@ -28,7 +28,7 @@
 G_BEGIN_DECLS
 
 
-#define PANGO_CAIRO_FONT_MAP_GET_IFACE(obj)  (G_TYPE_INSTANCE_GET_INTERFACE ((obj), PANGO_TYPE_CAIRO_FONT_MAP, PangoVkvgFontMapIface))
+#define PANGO_VKVG_FONT_MAP_GET_IFACE(obj)  (G_TYPE_INSTANCE_GET_INTERFACE ((obj), PANGO_TYPE_VKVG_FONT_MAP, PangoVkvgFontMapIface))
 
 typedef struct _PangoVkvgFontMapIface PangoVkvgFontMapIface;
 
@@ -44,7 +44,7 @@ struct _PangoVkvgFontMapIface
 };
 
 
-#define PANGO_CAIRO_FONT_GET_IFACE(obj) (G_TYPE_INSTANCE_GET_INTERFACE ((obj), PANGO_TYPE_CAIRO_FONT, PangoVkvgFontIface))
+#define PANGO_VKVG_FONT_GET_IFACE(obj) (G_TYPE_INSTANCE_GET_INTERFACE ((obj), PANGO_TYPE_VKVG_FONT, PangoVkvgFontIface))
 
 typedef struct _PangoVkvgFontIface                  PangoVkvgFontIface;
 typedef struct _PangoVkvgFontPrivate                PangoVkvgFontPrivate;
@@ -121,9 +121,9 @@ void _pango_vkvg_font_private_get_glyph_extents (PangoVkvgFontPrivate *cf_priv,
 						  PangoRectangle        *ink_rect,
 						  PangoRectangle        *logical_rect);
 
-#define PANGO_TYPE_CAIRO_RENDERER            (pango_vkvg_renderer_get_type())
-#define PANGO_CAIRO_RENDERER(object)         (G_TYPE_CHECK_INSTANCE_CAST ((object), PANGO_TYPE_CAIRO_RENDERER, PangoVkvgRenderer))
-#define PANGO_IS_CAIRO_RENDERER(object)      (G_TYPE_CHECK_INSTANCE_TYPE ((object), PANGO_TYPE_CAIRO_RENDERER))
+#define PANGO_TYPE_VKVG_RENDERER            (pango_vkvg_renderer_get_type())
+#define PANGO_VKVG_RENDERER(object)         (G_TYPE_CHECK_INSTANCE_CAST ((object), PANGO_TYPE_VKVG_RENDERER, PangoVkvgRenderer))
+#define PANGO_IS_VKVG_RENDERER(object)      (G_TYPE_CHECK_INSTANCE_TYPE ((object), PANGO_TYPE_VKVG_RENDERER))
 
 typedef struct _PangoVkvgRenderer PangoVkvgRenderer;
 
@@ -136,4 +136,4 @@ const vkvg_font_options_t *_pango_vkvg_context_get_merged_font_options (PangoCon
 
 G_END_DECLS
 
-#endif /* __PANGOCAIRO_PRIVATE_H__ */
+#endif /* __PANGOVKVG_PRIVATE_H__ */

@@ -19,8 +19,8 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#ifndef __PANGOCAIRO_FC_H__
-#define __PANGOCAIRO_FC_H__
+#ifndef __PANGOVKVG_FC_H__
+#define __PANGOVKVG_FC_H__
 
 #include <pango/pangofc-fontmap.h>
 #include <pango/pangovkvg.h>
@@ -28,13 +28,13 @@
 G_BEGIN_DECLS
 
 #ifdef __GI_SCANNER__
-#define PANGO_CAIRO_TYPE_FC_FONT_MAP    (pango_vkvg_fc_font_map_get_type())
-#define PANGO_CAIRO_FC_FONT_MAP(obj)    (G_TYPE_CHECK_INSTANCE_CAST ((obj), PANGO_CAIRO_TYPE_FC_FONT_MAP, PangoVkvgFcFontMap))
-#define PANGO_CAIRO_IS_FC_FONT_MAP(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), PANGO_CAIRO_TYPE_FC_FONT_MAP))
+#define PANGO_VKVG_TYPE_FC_FONT_MAP    (pango_vkvg_fc_font_map_get_type())
+#define PANGO_VKVG_FC_FONT_MAP(obj)    (G_TYPE_CHECK_INSTANCE_CAST ((obj), PANGO_VKVG_TYPE_FC_FONT_MAP, PangoVkvgFcFontMap))
+#define PANGO_VKVG_IS_FC_FONT_MAP(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), PANGO_VKVG_TYPE_FC_FONT_MAP))
 #else
-#define PANGO_TYPE_CAIRO_FC_FONT_MAP       (pango_vkvg_fc_font_map_get_type ())
-#define PANGO_CAIRO_FC_FONT_MAP(object)    (G_TYPE_CHECK_INSTANCE_CAST ((object), PANGO_TYPE_CAIRO_FC_FONT_MAP, PangoVkvgFcFontMap))
-#define PANGO_IS_CAIRO_FC_FONT_MAP(object) (G_TYPE_CHECK_INSTANCE_TYPE ((object), PANGO_TYPE_CAIRO_FC_FONT_MAP))
+#define PANGO_TYPE_VKVG_FC_FONT_MAP       (pango_vkvg_fc_font_map_get_type ())
+#define PANGO_VKVG_FC_FONT_MAP(object)    (G_TYPE_CHECK_INSTANCE_CAST ((object), PANGO_TYPE_VKVG_FC_FONT_MAP, PangoVkvgFcFontMap))
+#define PANGO_IS_VKVG_FC_FONT_MAP(object) (G_TYPE_CHECK_INSTANCE_TYPE ((object), PANGO_TYPE_VKVG_FC_FONT_MAP))
 #endif
 
 typedef struct _PangoVkvgFcFontMap PangoVkvgFcFontMap;
@@ -44,5 +44,5 @@ GType pango_vkvg_fc_font_map_get_type (void) G_GNUC_CONST;
 
 G_END_DECLS
 
-#endif /* __PANGOCAIRO_FC_H__ */
+#endif /* __PANGOVKVG_FC_H__ */
 

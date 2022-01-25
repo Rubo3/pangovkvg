@@ -19,8 +19,8 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#ifndef __PANGOCAIRO_FC_PRIVATE_H__
-#define __PANGOCAIRO_FC_PRIVATE_H__
+#ifndef __PANGOVKVG_FC_PRIVATE_H__
+#define __PANGOVKVG_FC_PRIVATE_H__
 
 #include <pango/pangofc-fontmap-private.h>
 #include <pango/pangovkvg-fc.h>
@@ -41,5 +41,5 @@ PangoFcFont *_pango_vkvg_fc_font_new (PangoVkvgFcFontMap *cffontmap,
 
 G_END_DECLS
 
-#endif /* __PANGOCAIRO_FC_PRIVATE_H__ */
+#endif /* __PANGOVKVG_FC_PRIVATE_H__ */
 

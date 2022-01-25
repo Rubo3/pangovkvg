@@ -29,11 +29,11 @@
 #include "pango-font-private.h"
 #include "pango-impl-utils.h"
 
-#define PANGO_CAIRO_FONT_PRIVATE(font)		\
+#define PANGO_VKVG_FONT_PRIVATE(font)		\
   ((PangoVkvgFontPrivate *)			\
    (font == NULL ? NULL :			\
     G_STRUCT_MEMBER_P (font,			\
-    PANGO_CAIRO_FONT_GET_IFACE(PANGO_CAIRO_FONT(font))->cf_priv_offset)))
+    PANGO_VKVG_FONT_GET_IFACE(PANGO_VKVG_FONT(font))->cf_priv_offset)))
 
 typedef PangoVkvgFontIface PangoVkvgFontInterface;
 G_DEFINE_INTERFACE (PangoVkvgFont, pango_vkvg_font, PANGO_TYPE_FONT)
@@ -76,7 +76,7 @@ _pango_vkvg_font_private_get_scaled_font (PangoVkvgFontPrivate *cf_priv)
       return NULL;
     }
 
-  font_face = (* PANGO_CAIRO_FONT_GET_IFACE (cf_priv->cfont)->create_font_face) (cf_priv->cfont);
+  font_face = (* PANGO_VKVG_FONT_GET_IFACE (cf_priv->cfont)->create_font_face) (cf_priv->cfont);
   if (G_UNLIKELY (font_face == NULL))
     goto done;
 
@@ -156,7 +156,7 @@ pango_vkvg_font_get_scaled_font (PangoVkvgFont *cfont)
   if (G_UNLIKELY (!cfont))
     return NULL;
 
-  cf_priv = PANGO_CAIRO_FONT_PRIVATE (cfont);
+  cf_priv = PANGO_VKVG_FONT_PRIVATE (cfont);
 
   return _pango_vkvg_font_private_get_scaled_font (cf_priv);
 }
@@ -221,7 +221,7 @@ _pango_vkvg_font_get_metrics (PangoFont     *font,
 			       PangoLanguage *language)
 {
   PangoVkvgFont *cfont = (PangoVkvgFont *) font;
-  PangoVkvgFontPrivate *cf_priv = PANGO_CAIRO_FONT_PRIVATE (font);
+  PangoVkvgFontPrivate *cf_priv = PANGO_VKVG_FONT_PRIVATE (font);
   PangoVkvgFontMetricsInfo *info = NULL; /* Quiet gcc */
   GSList *tmp_list;
   static int in_get_metrics;
@@ -277,7 +277,7 @@ _pango_vkvg_font_get_metrics (PangoFont     *font,
       pango_vkvg_context_set_font_options (context, font_options);
       vkvg_font_options_destroy (font_options);
 
-      info->metrics = (* PANGO_CAIRO_FONT_GET_IFACE (font)->create_base_metrics_for_context) (cfont, context);
+      info->metrics = (* PANGO_VKVG_FONT_GET_IFACE (font)->create_base_metrics_for_context) (cfont, context);
 
       /* We now need to adjust the base metrics for ctm */
       vkvg_scaled_font_get_ctm (scaled_font, &vkvg_matrix);
@@ -588,7 +588,7 @@ _pango_vkvg_font_hex_box_info_destroy (PangoVkvgFontHexBoxInfo *hbi)
 PangoVkvgFontHexBoxInfo *
 _pango_vkvg_font_get_hex_box_info (PangoVkvgFont *cfont)
 {
-  PangoVkvgFontPrivate *cf_priv = PANGO_CAIRO_FONT_PRIVATE (cfont);
+  PangoVkvgFontPrivate *cf_priv = PANGO_VKVG_FONT_PRIVATE (cfont);
 
   return _pango_vkvg_font_private_get_hex_box_info (cf_priv);
 }

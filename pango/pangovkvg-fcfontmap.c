@@ -96,7 +96,7 @@ vkvg_font_map_iface_init (PangoVkvgFontMapIface *iface)
 }
 
 G_DEFINE_TYPE_WITH_CODE (PangoVkvgFcFontMap, pango_vkvg_fc_font_map, PANGO_TYPE_FC_FONT_MAP,
-    { G_IMPLEMENT_INTERFACE (PANGO_TYPE_CAIRO_FONT_MAP, vkvg_font_map_iface_init) })
+    { G_IMPLEMENT_INTERFACE (PANGO_TYPE_VKVG_FONT_MAP, vkvg_font_map_iface_init) })
 
 static void
 pango_vkvg_fc_font_map_fontset_key_substitute (PangoFcFontMap    *fcfontmap G_GNUC_UNUSED,

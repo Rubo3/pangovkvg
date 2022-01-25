@@ -1,5 +1,5 @@
-#ifndef __PANGOCAIRO_H__
-#define __PANGOCAIRO_H__
+#ifndef __PANGOVKVG_H__
+#define __PANGOVKVG_H__
 
 #include <pango/pango.h>
 #include <vkvg.h>
@@ -25,13 +25,13 @@ typedef struct _PangoVkvgFont      PangoVkvgFont;
  * PangoVkvg namespace.
  */
 #ifdef __GI_SCANNER__
-#define PANGO_CAIRO_TYPE_FONT           (pango_vkvg_font_get_type())
-#define PANGO_CAIRO_FONT(obj)           (G_TYPE_CHECK_INSTANCE_CAST ((obj), PANGO_CAIRO_TYPE_FONT, PangoVkvgFont))
-#define PANGO_CAIRO_IS_FONT(obj)        (G_TYPE_CHECK_INSTANCE_TYPE ((obj), PANGO_CAIRO_TYPE_FONT))
+#define PANGO_VKVG_TYPE_FONT           (pango_vkvg_font_get_type())
+#define PANGO_VKVG_FONT(obj)           (G_TYPE_CHECK_INSTANCE_CAST ((obj), PANGO_VKVG_TYPE_FONT, PangoVkvgFont))
+#define PANGO_VKVG_IS_FONT(obj)        (G_TYPE_CHECK_INSTANCE_TYPE ((obj), PANGO_VKVG_TYPE_FONT))
 #else
-#define PANGO_TYPE_CAIRO_FONT           (pango_vkvg_font_get_type ())
-#define PANGO_CAIRO_FONT(object)        (G_TYPE_CHECK_INSTANCE_CAST ((object), PANGO_TYPE_CAIRO_FONT, PangoVkvgFont))
-#define PANGO_IS_CAIRO_FONT(object)     (G_TYPE_CHECK_INSTANCE_TYPE ((object), PANGO_TYPE_CAIRO_FONT))
+#define PANGO_TYPE_VKVG_FONT           (pango_vkvg_font_get_type ())
+#define PANGO_VKVG_FONT(object)        (G_TYPE_CHECK_INSTANCE_CAST ((object), PANGO_TYPE_VKVG_FONT, PangoVkvgFont))
+#define PANGO_IS_VKVG_FONT(object)     (G_TYPE_CHECK_INSTANCE_TYPE ((object), PANGO_TYPE_VKVG_FONT))
 #endif
 
 /**
@@ -48,13 +48,13 @@ typedef struct _PangoVkvgFont      PangoVkvgFont;
 typedef struct _PangoVkvgFontMap        PangoVkvgFontMap;
 
 #ifdef __GI_SCANNER__
-#define PANGO_CAIRO_TYPE_FONT_MAP       (pango_vkvg_font_map_get_type())
-#define PANGO_CAIRO_FONT_MAP(obj)       (G_TYPE_CHECK_INSTANCE_CAST ((obj), PANGO_CAIRO_TYPE_FONT_MAP, PangoVkvgFontMap))
-#define PANGO_CAIRO_IS_FONT_MAP(obj)    (G_TYPE_CHECK_INSTANCE_TYPE ((obj), PANGO_CAIRO_TYPE_FONT_MAP))
+#define PANGO_VKVG_TYPE_FONT_MAP       (pango_vkvg_font_map_get_type())
+#define PANGO_VKVG_FONT_MAP(obj)       (G_TYPE_CHECK_INSTANCE_CAST ((obj), PANGO_VKVG_TYPE_FONT_MAP, PangoVkvgFontMap))
+#define PANGO_VKVG_IS_FONT_MAP(obj)    (G_TYPE_CHECK_INSTANCE_TYPE ((obj), PANGO_VKVG_TYPE_FONT_MAP))
 #else
-#define PANGO_TYPE_CAIRO_FONT_MAP       (pango_vkvg_font_map_get_type ())
-#define PANGO_CAIRO_FONT_MAP(object)    (G_TYPE_CHECK_INSTANCE_CAST ((object), PANGO_TYPE_CAIRO_FONT_MAP, PangoVkvgFontMap))
-#define PANGO_IS_CAIRO_FONT_MAP(object) (G_TYPE_CHECK_INSTANCE_TYPE ((object), PANGO_TYPE_CAIRO_FONT_MAP))
+#define PANGO_TYPE_VKVG_FONT_MAP       (pango_vkvg_font_map_get_type ())
+#define PANGO_VKVG_FONT_MAP(object)    (G_TYPE_CHECK_INSTANCE_CAST ((object), PANGO_TYPE_VKVG_FONT_MAP, PangoVkvgFontMap))
+#define PANGO_IS_VKVG_FONT_MAP(object) (G_TYPE_CHECK_INSTANCE_TYPE ((object), PANGO_TYPE_VKVG_FONT_MAP))
 #endif
 
 /**
@@ -197,4 +197,4 @@ void pango_vkvg_error_underline_path (VkvgContext cr,
 
 G_END_DECLS
 
-#endif /* __PANGOCAIRO_H__ */
+#endif /* __PANGOVKVG_H__ */

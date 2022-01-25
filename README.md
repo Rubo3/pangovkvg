@@ -6,15 +6,26 @@ Source code of `pangocairo` taken from the [Pango repository](https://gitlab.gno
 
 Missing replacements for:
 
-* `cairo_font_face_t`
-* `cairo_font_options_t`
-* `cairo_font_type_t`
-* `cairo_glyph_t`
-* `cairo_hint_metrics_t`
-* `cairo_scaled_font_t`
-* `cairo_text_cluster_t`
-* `cairo_text_cluster_flags_t`
-* `"cairo-ft.h"`
+* Headers:
+  * `"cairo-ft.h"`
+
+* Structures and enumerations:
+  * `cairo_font_face_t`
+  * `cairo_font_options_t`
+  * `cairo_font_type_t`
+  * `cairo_glyph_t`
+  * `cairo_hint_metrics_t`
+  * `cairo_scaled_font_t`
+  * `cairo_text_cluster_t`
+  * `cairo_text_cluster_flags_t`
+
+* Functions:
+  * `cairo_font_options_copy`
+  * `cairo_font_options_create`
+  * `cairo_font_options_destroy`
+  * `cairo_font_options_equal`
+  * `cairo_font_options_get_hint_metrics`
+  * `cairo_font_options_merge`
 
 ## License
 
