@@ -89,7 +89,7 @@ _pango_vkvg_font_private_get_scaled_font (PangoVkvgFontPrivate *cf_priv)
 
 done:
 
-  if (G_UNLIKELY (cf_priv->scaled_font == NULL || vkvg_scaled_font_status (cf_priv->scaled_font) != CAIRO_STATUS_SUCCESS))
+  if (G_UNLIKELY (cf_priv->scaled_font == NULL || vkvg_scaled_font_status (cf_priv->scaled_font) != VKVG_STATUS_SUCCESS))
     {
       vkvg_scaled_font_t *scaled_font = cf_priv->scaled_font;
       PangoFont *font = PANGO_FONT (cf_priv->cfont);
@@ -177,7 +177,7 @@ _pango_vkvg_font_install (PangoFont *font,
 {
   vkvg_scaled_font_t *scaled_font = pango_vkvg_font_get_scaled_font ((PangoVkvgFont *)font);
 
-  if (G_UNLIKELY (scaled_font == NULL || vkvg_scaled_font_status (scaled_font) != CAIRO_STATUS_SUCCESS))
+  if (G_UNLIKELY (scaled_font == NULL || vkvg_scaled_font_status (scaled_font) != VKVG_STATUS_SUCCESS))
     return FALSE;
 
   vkvg_set_scaled_font (cr, scaled_font);
@@ -400,7 +400,7 @@ _pango_vkvg_font_private_get_hex_box_info (PangoVkvgFontPrivate *cf_priv)
     return cf_priv->hbi;
 
   scaled_font = _pango_vkvg_font_private_get_scaled_font (cf_priv);
-  if (G_UNLIKELY (scaled_font == NULL || vkvg_scaled_font_status (scaled_font) != CAIRO_STATUS_SUCCESS))
+  if (G_UNLIKELY (scaled_font == NULL || vkvg_scaled_font_status (scaled_font) != VKVG_STATUS_SUCCESS))
     return NULL;
 
   is_hinted = cf_priv->is_hinted;
@@ -508,7 +508,7 @@ _pango_vkvg_font_private_get_hex_box_info (PangoVkvgFontPrivate *cf_priv)
 
 
   scaled_mini_font = pango_vkvg_font_get_scaled_font ((PangoVkvgFont *) mini_font);
-  if (G_UNLIKELY (scaled_mini_font == NULL || vkvg_scaled_font_status (scaled_mini_font) != CAIRO_STATUS_SUCCESS))
+  if (G_UNLIKELY (scaled_mini_font == NULL || vkvg_scaled_font_status (scaled_mini_font) != VKVG_STATUS_SUCCESS))
     return NULL;
 
   for (i = 0 ; i < 16 ; i++)
