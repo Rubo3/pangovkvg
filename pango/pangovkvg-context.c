@@ -34,9 +34,9 @@ struct _PangoVkvgContextInfo
   double dpi;
   gboolean set_options_explicit;
 
-  vkvg_font_options_t *set_options;
-  vkvg_font_options_t *surface_options;
-  vkvg_font_options_t *merged_options;
+  // vkvg_font_options_t *set_options;
+  // vkvg_font_options_t *surface_options;
+  // vkvg_font_options_t *merged_options;
 
   PangoVkvgShapeRendererFunc shape_renderer_func;
   gpointer                    shape_renderer_data;
@@ -46,12 +46,12 @@ struct _PangoVkvgContextInfo
 static void
 free_context_info (PangoVkvgContextInfo *info)
 {
-  if (info->set_options)
-    vkvg_font_options_destroy (info->set_options);
-  if (info->surface_options)
-    vkvg_font_options_destroy (info->surface_options);
-  if (info->merged_options)
-    vkvg_font_options_destroy (info->merged_options);
+  // if (info->set_options)
+  //   vkvg_font_options_destroy (info->set_options);
+  // if (info->surface_options)
+  //   vkvg_font_options_destroy (info->surface_options);
+  // if (info->merged_options)
+  //   vkvg_font_options_destroy (info->merged_options);
 
   if (info->shape_renderer_notify)
     info->shape_renderer_notify (info->shape_renderer_data);
@@ -90,7 +90,7 @@ retry:
 }
 
 static void
-_pango_vkvg_update_context (VkvgContext cr,
+_pango_vkvg_update_context (VkvgContext ctx,
 			     PangoContext *context)
 {
   PangoVkvgContextInfo *info;
@@ -98,40 +98,40 @@ _pango_vkvg_update_context (VkvgContext cr,
   VkvgSurface target;
   PangoMatrix pango_matrix;
   const PangoMatrix *current_matrix, identity_matrix = PANGO_MATRIX_INIT;
-  const vkvg_font_options_t *merged_options;
-  vkvg_font_options_t *old_merged_options;
+  // const vkvg_font_options_t *merged_options;
+  // vkvg_font_options_t *old_merged_options;
   gboolean changed = FALSE;
 
   info = get_context_info (context, TRUE);
 
-  target = vkvg_get_target (cr);
+  target = vkvg_get_target (ctx);
 
-  if (!info->surface_options)
-    info->surface_options = vkvg_font_options_create ();
-  vkvg_surface_get_font_options (target, info->surface_options);
-  if (!info->set_options_explicit)
-  {
-    if (!info->set_options)
-      info->set_options = vkvg_font_options_create ();
-    vkvg_get_font_options (cr, info->set_options);
-  }
+  // if (!info->surface_options)
+  //   info->surface_options = vkvg_font_options_create ();
+  // vkvg_surface_get_font_options (target, info->surface_options);
+  // if (!info->set_options_explicit)
+  // {
+  //   if (!info->set_options)
+  //     info->set_options = vkvg_font_options_create ();
+  //   vkvg_get_font_options (ctx, info->set_options);
+  // }
 
-  old_merged_options = info->merged_options;
-  info->merged_options = NULL;
+  // old_merged_options = info->merged_options;
+  // info->merged_options = NULL;
 
-  merged_options = _pango_vkvg_context_get_merged_font_options (context);
+  // merged_options = _pango_vkvg_context_get_merged_font_options (context);
 
-  if (old_merged_options)
-    {
-      if (!vkvg_font_options_equal (merged_options, old_merged_options))
-	changed = TRUE;
-      vkvg_font_options_destroy (old_merged_options);
-      old_merged_options = NULL;
-    }
-  else
-    changed = TRUE;
+  // if (old_merged_options)
+  //   {
+  //     if (!vkvg_font_options_equal (merged_options, old_merged_options))
+	//       changed = TRUE;
+  //     vkvg_font_options_destroy (old_merged_options);
+  //     old_merged_options = NULL;
+  //   }
+  // else
+  //   changed = TRUE;
 
-  vkvg_get_matrix (cr, &vkvg_matrix);
+  vkvg_get_matrix (ctx, &vkvg_matrix);
   pango_matrix.xx = vkvg_matrix.xx;
   pango_matrix.yx = vkvg_matrix.yx;
   pango_matrix.xy = vkvg_matrix.xy;
@@ -145,8 +145,9 @@ _pango_vkvg_update_context (VkvgContext cr,
 
   /* layout is matrix-independent if metrics-hinting is off.
    * also ignore matrix translation offsets */
-  if ((vkvg_font_options_get_hint_metrics (merged_options) != CAIRO_HINT_METRICS_OFF) &&
-      (0 != memcmp (&pango_matrix, current_matrix, sizeof (PangoMatrix))))
+  //if (vkvg_font_options_get_hint_metrics (merged_options) != VKVG_HINT_METRICS_OFF
+  //&&  memcmp (&pango_matrix, current_matrix, sizeof (PangoMatrix)) != 0)
+  if (memcmp (&pango_matrix, current_matrix, sizeof (PangoMatrix)) != 0)
     changed = TRUE;
 
   pango_context_set_matrix (context, &pango_matrix);
@@ -157,7 +158,7 @@ _pango_vkvg_update_context (VkvgContext cr,
 
 /**
  * pango_vkvg_update_context:
- * @cr: a Vkvg context
+ * @ctx: a Vkvg context
  * @context: a `PangoContext`, from a pangovkvg font map
  *
  * Updates a `PangoContext` previously created for use with Vkvg to
@@ -170,13 +171,13 @@ _pango_vkvg_update_context (VkvgContext cr,
  * Since: 1.10
  */
 void
-pango_vkvg_update_context (VkvgContext cr,
+pango_vkvg_update_context (VkvgContext ctx,
 			    PangoContext *context)
 {
-  g_return_if_fail (cr != NULL);
+  g_return_if_fail (ctx != NULL);
   g_return_if_fail (PANGO_IS_CONTEXT (context));
 
-  _pango_vkvg_update_context (cr, context);
+  _pango_vkvg_update_context (ctx, context);
 }
 
 /**
@@ -194,13 +195,13 @@ pango_vkvg_update_context (VkvgContext cr,
  *
  * Since: 1.10
  */
-void
-pango_vkvg_context_set_resolution (PangoContext *context,
-				    double        dpi)
-{
-  PangoVkvgContextInfo *info = get_context_info (context, TRUE);
-  info->dpi = dpi;
-}
+// void
+// pango_vkvg_context_set_resolution (PangoContext *context,
+// 				    double        dpi)
+// {
+//   PangoVkvgContextInfo *info = get_context_info (context, TRUE);
+//   info->dpi = dpi;
+// }
 
 /**
  * pango_vkvg_context_get_resolution:
@@ -215,16 +216,16 @@ pango_vkvg_context_set_resolution (PangoContext *context,
  *
  * Since: 1.10
  */
-double
-pango_vkvg_context_get_resolution (PangoContext *context)
-{
-  PangoVkvgContextInfo *info = get_context_info (context, FALSE);
+// double
+// pango_vkvg_context_get_resolution (PangoContext *context)
+// {
+//   PangoVkvgContextInfo *info = get_context_info (context, FALSE);
 
-  if (info)
-    return info->dpi;
-  else
-    return -1.0;
-}
+//   if (info)
+//     return info->dpi;
+//   else
+//     return -1.0;
+// }
 
 /**
  * pango_vkvg_context_set_font_options:
@@ -239,47 +240,47 @@ pango_vkvg_context_get_resolution (PangoContext *context)
  *
  * Since: 1.10
  */
-void
-pango_vkvg_context_set_font_options (PangoContext               *context,
-				      const vkvg_font_options_t *options)
-{
-  PangoVkvgContextInfo *info;
+// void
+// pango_vkvg_context_set_font_options (PangoContext               *context,
+// 				      const vkvg_font_options_t *options)
+// {
+//   PangoVkvgContextInfo *info;
 
-  g_return_if_fail (PANGO_IS_CONTEXT (context));
+//   g_return_if_fail (PANGO_IS_CONTEXT (context));
 
-  info = get_context_info (context, TRUE);
+//   info = get_context_info (context, TRUE);
 
-  if (!info->set_options && !options)
-    return;
+//   if (!info->set_options && !options)
+//     return;
 
-  if (info->set_options &&
-      options &&
-      vkvg_font_options_equal (info->set_options, options))
-    return;
+//   if (info->set_options &&
+//       options &&
+//       vkvg_font_options_equal (info->set_options, options))
+//     return;
 
-  if (info->set_options || options)
-    pango_context_changed (context);
+//   if (info->set_options || options)
+//     pango_context_changed (context);
 
- if (info->set_options)
-    vkvg_font_options_destroy (info->set_options);
+//  if (info->set_options)
+//     vkvg_font_options_destroy (info->set_options);
 
-  if (options)
-  {
-    info->set_options = vkvg_font_options_copy (options);
-    info->set_options_explicit = TRUE;
-  }
-  else
-  {
-    info->set_options = NULL;
-    info->set_options_explicit = FALSE;
-  }
+//   if (options)
+//   {
+//     info->set_options = vkvg_font_options_copy (options);
+//     info->set_options_explicit = TRUE;
+//   }
+//   else
+//   {
+//     info->set_options = NULL;
+//     info->set_options_explicit = FALSE;
+//   }
 
-  if (info->merged_options)
-    {
-      vkvg_font_options_destroy (info->merged_options);
-      info->merged_options = NULL;
-    }
-}
+//   if (info->merged_options)
+//     {
+//       vkvg_font_options_destroy (info->merged_options);
+//       info->merged_options = NULL;
+//     }
+// }
 
 /**
  * pango_vkvg_context_get_font_options:
@@ -297,20 +298,20 @@ pango_vkvg_context_set_font_options (PangoContext               *context,
  *
  * Since: 1.10
  */
-const vkvg_font_options_t *
-pango_vkvg_context_get_font_options (PangoContext *context)
-{
-  PangoVkvgContextInfo *info;
+// const vkvg_font_options_t *
+// pango_vkvg_context_get_font_options (PangoContext *context)
+// {
+//   PangoVkvgContextInfo *info;
 
-  g_return_val_if_fail (PANGO_IS_CONTEXT (context), NULL);
+//   g_return_val_if_fail (PANGO_IS_CONTEXT (context), NULL);
 
-  info = get_context_info (context, FALSE);
+//   info = get_context_info (context, FALSE);
 
-  if (info)
-    return info->set_options;
-  else
-    return NULL;
-}
+//   if (info)
+//     return info->set_options;
+//   else
+//     return NULL;
+// }
 
 /**
  * _pango_vkvg_context_merge_font_options:
@@ -323,23 +324,23 @@ pango_vkvg_context_get_font_options (PangoContext *context)
  * Return value: the combined set of font options. This value is owned
  *   by the context and must not be modified or freed.
  */
-const vkvg_font_options_t *
-_pango_vkvg_context_get_merged_font_options (PangoContext *context)
-{
-  PangoVkvgContextInfo *info = get_context_info (context, TRUE);
+// const vkvg_font_options_t *
+// _pango_vkvg_context_get_merged_font_options (PangoContext *context)
+// {
+//   PangoVkvgContextInfo *info = get_context_info (context, TRUE);
 
-  if (!info->merged_options)
-    {
-      info->merged_options = vkvg_font_options_create ();
+//   if (!info->merged_options)
+//     {
+//       info->merged_options = vkvg_font_options_create ();
 
-      if (info->surface_options)
-	vkvg_font_options_merge (info->merged_options, info->surface_options);
-      if (info->set_options)
-	vkvg_font_options_merge (info->merged_options, info->set_options);
-    }
+//       if (info->surface_options)
+// 	vkvg_font_options_merge (info->merged_options, info->surface_options);
+//       if (info->set_options)
+// 	vkvg_font_options_merge (info->merged_options, info->set_options);
+//     }
 
-  return info->merged_options;
-}
+//   return info->merged_options;
+// }
 
 /**
  * pango_vkvg_context_set_shape_renderer:
@@ -357,25 +358,25 @@ _pango_vkvg_context_get_merged_font_options (PangoContext *context)
  *
  * Since: 1.18
  */
-void
-pango_vkvg_context_set_shape_renderer (PangoContext                *context,
-					PangoVkvgShapeRendererFunc  func,
-					gpointer                     data,
-					GDestroyNotify               dnotify)
-{
-  PangoVkvgContextInfo *info;
+// void
+// pango_vkvg_context_set_shape_renderer (PangoContext                *context,
+// 					PangoVkvgShapeRendererFunc  func,
+// 					gpointer                     data,
+// 					GDestroyNotify               dnotify)
+// {
+//   PangoVkvgContextInfo *info;
 
-  g_return_if_fail (PANGO_IS_CONTEXT (context));
+//   g_return_if_fail (PANGO_IS_CONTEXT (context));
 
-  info  = get_context_info (context, TRUE);
+//   info  = get_context_info (context, TRUE);
 
-  if (info->shape_renderer_notify)
-    info->shape_renderer_notify (info->shape_renderer_data);
+//   if (info->shape_renderer_notify)
+//     info->shape_renderer_notify (info->shape_renderer_data);
 
-  info->shape_renderer_func   = func;
-  info->shape_renderer_data   = data;
-  info->shape_renderer_notify = dnotify;
-}
+//   info->shape_renderer_func   = func;
+//   info->shape_renderer_data   = data;
+//   info->shape_renderer_notify = dnotify;
+// }
 
 /**
  * pango_vkvg_context_get_shape_renderer: (skip)
@@ -423,7 +424,7 @@ pango_vkvg_context_get_shape_renderer (PangoContext *context,
 
 /**
  * pango_vkvg_create_context:
- * @cr: a Vkvg context
+ * @ctx: a Vkvg context
  *
  * Creates a context object set up to match the current transformation
  * and target surface of the Vkvg context.
@@ -432,8 +433,8 @@ pango_vkvg_context_get_shape_renderer (PangoContext *context,
  * used to create a layout using [ctor@Pango.Layout.new].
  *
  * This function is a convenience function that creates a context using
- * the default font map, then updates it to @cr. If you just need to
- * create a layout for use with @cr and do not need to access `PangoContext`
+ * the default font map, then updates it to @ctx. If you just need to
+ * create a layout for use with @ctx and do not need to access `PangoContext`
  * directly, you can use [func@create_layout] instead.
  *
  * Return value: (transfer full): the newly created `PangoContext`
@@ -441,23 +442,23 @@ pango_vkvg_context_get_shape_renderer (PangoContext *context,
  * Since: 1.22
  */
 PangoContext *
-pango_vkvg_create_context (VkvgContext cr)
+pango_vkvg_create_context (VkvgContext ctx)
 {
   PangoFontMap *fontmap;
   PangoContext *context;
 
-  g_return_val_if_fail (cr != NULL, NULL);
+  g_return_val_if_fail (ctx != NULL, NULL);
 
   fontmap = pango_vkvg_font_map_get_default ();
   context = pango_font_map_create_context (fontmap);
-  pango_vkvg_update_context (cr, context);
+  pango_vkvg_update_context (ctx, context);
 
   return context;
 }
 
 /**
  * pango_vkvg_create_layout:
- * @cr: a Vkvg context
+ * @ctx: a Vkvg context
  *
  * Creates a layout object set up to match the current transformation
  * and target surface of the Vkvg context.
@@ -465,7 +466,7 @@ pango_vkvg_create_context (VkvgContext cr)
  * This layout can then be used for text measurement with functions
  * like [method@Pango.Layout.get_size] or drawing with functions like
  * [func@show_layout]. If you change the transformation or target
- * surface for @cr, you need to call [func@update_layout].
+ * surface for @ctx, you need to call [func@update_layout].
  *
  * This function is the most convenient way to use Vkvg with Pango,
  * however it is slightly inefficient since it creates a separate
@@ -477,14 +478,14 @@ pango_vkvg_create_context (VkvgContext cr)
  * Since: 1.10
  */
 PangoLayout *
-pango_vkvg_create_layout (VkvgContext cr)
+pango_vkvg_create_layout (VkvgContext ctx)
 {
   PangoContext *context;
   PangoLayout *layout;
 
-  g_return_val_if_fail (cr != NULL, NULL);
+  g_return_val_if_fail (ctx != NULL, NULL);
 
-  context = pango_vkvg_create_context (cr);
+  context = pango_vkvg_create_context (ctx);
   layout = pango_layout_new (context);
   g_object_unref (context);
 
@@ -493,7 +494,7 @@ pango_vkvg_create_layout (VkvgContext cr)
 
 /**
  * pango_vkvg_update_layout:
- * @cr: a Vkvg context
+ * @ctx: a Vkvg context
  * @layout: a `PangoLayout`, from [func@create_layout]
  *
  * Updates the private `PangoContext` of a `PangoLayout` created with
@@ -503,12 +504,12 @@ pango_vkvg_create_layout (VkvgContext cr)
  * Since: 1.10
  */
 void
-pango_vkvg_update_layout (VkvgContext cr,
+pango_vkvg_update_layout (VkvgContext ctx,
 			   PangoLayout *layout)
 {
-  g_return_if_fail (cr != NULL);
+  g_return_if_fail (ctx != NULL);
   g_return_if_fail (PANGO_IS_LAYOUT (layout));
 
-  _pango_vkvg_update_context (cr, pango_layout_get_context (layout));
+  _pango_vkvg_update_context (ctx, pango_layout_get_context (layout));
 }
 
