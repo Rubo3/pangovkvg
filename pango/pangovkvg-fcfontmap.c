@@ -84,7 +84,7 @@ pango_vkvg_fc_font_map_get_resolution_vkvg (PangoVkvgFontMap *cfontmap)
 static vkvg_font_type_t
 pango_vkvg_fc_font_map_get_font_type (PangoVkvgFontMap *cfontmap G_GNUC_UNUSED)
 {
-  return CAIRO_FONT_TYPE_FT;
+  return VKVG_FONT_TYPE_FT;
 }
 
 static void
