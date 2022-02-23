@@ -4,7 +4,7 @@ Source code of `pangocairo` taken from the [Pango repository](https://gitlab.gno
 
 ## Notes
 
-I am reimplementing few functions at a time, everything else is commented out.
+I am reimplementing few functions at a time, everything else is commented out. Currently it doesn't compile.
 
 ## License
 
