@@ -177,7 +177,7 @@ _pango_vkvg_renderer_draw_frame (PangoVkvgRenderer *crenderer,
 	  vkvg_close_path (cr);
 	}
       else
-	vkvg_rectangle (cr, x+width-d2, y+d2, - (width-d), height-d);
+	vkvg_rectangle (cr, x + width - d2, y + d2, -(width - d), height - d);
     }
   else
     {
@@ -402,23 +402,23 @@ done:
 #define STACK_ARRAY_LENGTH(T) (STACK_BUFFER_SIZE / sizeof(T))
 
 static void
-pango_vkvg_renderer_show_text_glyphs (PangoRenderer        *renderer,
-				       const char           *text,
-				       int                   text_len,
-				       PangoGlyphString     *glyphs,
-				       vkvg_text_cluster_t *clusters,
-				       int                   num_clusters,
-				       gboolean              backward,
-				       PangoFont            *font,
-				       int                   x,
-				       int                   y)
+pango_vkvg_renderer_show_text_glyphs(PangoRenderer       *renderer,
+                                     const char          *text,
+                                     int                  text_len,
+                                     PangoGlyphString    *glyphs,
+                                     vkvg_text_cluster_t *clusters,
+                                     int                  num_clusters,
+                                     gboolean             backward,
+                                     PangoFont           *font,
+                                     int                  x,
+                                     int                  y)
 {
   PangoVkvgRenderer *crenderer = (PangoVkvgRenderer *) (renderer);
 
   int i, count;
   int x_position = 0;
-  vkvg_glyph_t *vkvg_glyphs;
-  vkvg_glyph_t stack_glyphs[STACK_ARRAY_LENGTH (vkvg_glyph_t)];
+  vkvg_glyph_info_t *vkvg_glyphs;
+  vkvg_glyph_info_t  stack_glyphs[STACK_ARRAY_LENGTH (vkvg_glyph_info_t)];
   double base_x = crenderer->x_offset + (double)x / PANGO_SCALE;
   double base_y = crenderer->y_offset + (double)y / PANGO_SCALE;
 
@@ -426,73 +426,65 @@ pango_vkvg_renderer_show_text_glyphs (PangoRenderer        *renderer,
   if (!crenderer->do_path)
     set_color (crenderer, PANGO_RENDER_PART_FOREGROUND);
 
-  if (!_pango_vkvg_font_install (font, crenderer->cr))
-    {
-      for (i = 0; i < glyphs->num_glyphs; i++)
-	{
-	  PangoGlyphInfo *gi = &glyphs->glyphs[i];
+  if (!_pango_vkvg_font_install (font, crenderer->cr)) {
+    for (i = 0; i < glyphs->num_glyphs; i++) {
+	    PangoGlyphInfo *gi = &glyphs->glyphs[i];
 
-	  if (gi->glyph != PANGO_GLYPH_EMPTY)
-	    {
-	      double cx = base_x + (double)(x_position + gi->geometry.x_offset) / PANGO_SCALE;
-	      double cy = gi->geometry.y_offset == 0 ?
-			  base_y :
-			  base_y + (double)(gi->geometry.y_offset) / PANGO_SCALE;
+      if (gi->glyph != PANGO_GLYPH_EMPTY)
+        {
+          double cx = base_x + (double)(x_position + gi->geometry.x_offset) / PANGO_SCALE;
+          double cy = gi->geometry.y_offset == 0 ?
+          base_y :
+          base_y + (double)(gi->geometry.y_offset) / PANGO_SCALE;
 
-	      _pango_vkvg_renderer_draw_unknown_glyph (crenderer, font, gi, cx, cy);
-	    }
-	  x_position += gi->geometry.width;
-	}
-
-      goto done;
+          _pango_vkvg_renderer_draw_unknown_glyph (crenderer, font, gi, cx, cy);
+        }
+      x_position += gi->geometry.width;
     }
 
+    goto done;
+  }
+
   if (glyphs->num_glyphs > (int) G_N_ELEMENTS (stack_glyphs))
-    vkvg_glyphs = g_new (vkvg_glyph_t, glyphs->num_glyphs);
+    vkvg_glyphs = g_new (vkvg_glyph_info_t, glyphs->num_glyphs);
   else
     vkvg_glyphs = stack_glyphs;
 
   count = 0;
-  for (i = 0; i < glyphs->num_glyphs; i++)
-    {
-      PangoGlyphInfo *gi = &glyphs->glyphs[i];
+  for (i = 0; i < glyphs->num_glyphs; i++) {
+    PangoGlyphInfo *gi = &glyphs->glyphs[i];
 
-      if (gi->glyph != PANGO_GLYPH_EMPTY)
-	{
-	  double cx = base_x + (double)(x_position + gi->geometry.x_offset) / PANGO_SCALE;
-	  double cy = gi->geometry.y_offset == 0 ?
-		      base_y :
-		      base_y + (double)(gi->geometry.y_offset) / PANGO_SCALE;
+    if (gi->glyph != PANGO_GLYPH_EMPTY) {
+      double cx = base_x + (double)(x_position + gi->geometry.x_offset) / PANGO_SCALE;
+      double cy = gi->geometry.y_offset == 0 ?
+          base_y :
+          base_y + (double)(gi->geometry.y_offset) / PANGO_SCALE;
 
-	  if (gi->glyph & PANGO_GLYPH_UNKNOWN_FLAG)
-            {
-              if (gi->glyph == (0x20 | PANGO_GLYPH_UNKNOWN_FLAG))
-                ; /* no hex boxes for space, please */
-              else
-	        _pango_vkvg_renderer_draw_unknown_glyph (crenderer, font, gi, cx, cy);
-            }
-	  else
-	    {
-	      vkvg_glyphs[count].index = gi->glyph;
-	      vkvg_glyphs[count].x = cx;
-	      vkvg_glyphs[count].y = cy;
-	      count++;
-	    }
-	}
-      x_position += gi->geometry.width;
+      if (gi->glyph & PANGO_GLYPH_UNKNOWN_FLAG) {
+        if (gi->glyph == (0x20 | PANGO_GLYPH_UNKNOWN_FLAG))
+          ; /* no hex boxes for space, please */
+        else
+          _pango_vkvg_renderer_draw_unknown_glyph (crenderer, font, gi, cx, cy);
+      } else {
+        vkvg_glyphs[count].codepoint = gi->glyph;
+        vkvg_glyphs[count].x_offset = cx; // x_advance?
+        vkvg_glyphs[count].y_offset = cy; // y_advance?
+        count++;
+      }
     }
+    x_position += gi->geometry.width;
+  }
 
   if (G_UNLIKELY (crenderer->do_path))
-    vkvg_glyph_path (crenderer->cr, vkvg_glyphs, count);
+    vkvg_glyph_path(crenderer->cr, vkvg_glyphs, count);
+  else if (G_UNLIKELY (clusters))
+    vkvg_show_text_glyphs(crenderer->cr,
+			                    text, text_len,
+			                    vkvg_glyphs, count,
+			                    clusters, num_clusters,
+			                    backward ? VKVG_TEXT_CLUSTER_FLAG_BACKWARD : 0);
   else
-    if (G_UNLIKELY (clusters))
-      vkvg_show_text_glyphs (crenderer->cr,
-			      text, text_len,
-			      vkvg_glyphs, count,
-			      clusters, num_clusters,
-			      backward ? CAIRO_TEXT_CLUSTER_FLAG_BACKWARD : 0);
-    else
-      vkvg_show_glyphs (crenderer->cr, vkvg_glyphs, count);
+    vkvg_show_glyphs (crenderer->cr, vkvg_glyphs, count);
 
   if (vkvg_glyphs != stack_glyphs)
     g_free (vkvg_glyphs);
@@ -502,19 +494,13 @@ done:
 }
 
 static void
-pango_vkvg_renderer_draw_glyphs (PangoRenderer     *renderer,
-				  PangoFont         *font,
-				  PangoGlyphString  *glyphs,
-				  int                x,
-				  int                y)
+pango_vkvg_renderer_draw_glyphs(PangoRenderer    *renderer,
+                                PangoFont        *font,
+                                PangoGlyphString *glyphs,
+                                int               x,
+                                int               y)
 {
-  pango_vkvg_renderer_show_text_glyphs (renderer,
-					 NULL, 0,
-					 glyphs,
-					 NULL, 0,
-					 FALSE,
-					 font,
-					 x, y);
+  pango_vkvg_renderer_show_text_glyphs (renderer, NULL, 0, glyphs, NULL, 0, FALSE, font, x, y);
 }
 
 static void
@@ -532,7 +518,7 @@ pango_vkvg_renderer_draw_glyph_item (PangoRenderer     *renderer,
 
   PangoGlyphItemIter   iter;
   vkvg_text_cluster_t *vkvg_clusters;
-  vkvg_text_cluster_t stack_clusters[STACK_ARRAY_LENGTH (vkvg_text_cluster_t)];
+  vkvg_text_cluster_t  stack_clusters[STACK_ARRAY_LENGTH (vkvg_text_cluster_t)];
   int num_clusters;
 
   if (!crenderer->has_show_text_glyphs || crenderer->do_path)
@@ -780,7 +766,7 @@ pango_vkvg_renderer_draw_shape (PangoRenderer  *renderer,
   VkvgContext cr = crenderer->cr;
   PangoLayout *layout;
   PangoVkvgShapeRendererFunc shape_renderer;
-  gpointer                    shape_renderer_data;
+  gpointer                   shape_renderer_data;
   double base_x, base_y;
 
   layout = pango_renderer_get_layout (renderer);
@@ -876,7 +862,7 @@ save_current_point (PangoVkvgRenderer *renderer)
   vkvg_get_current_point (renderer->cr, &renderer->x_offset, &renderer->y_offset);
 
   /* abuse save_current_point() to cache vkvg_has_show_text_glyphs() result */
-  renderer->has_show_text_glyphs = vkvg_surface_has_show_text_glyphs (vkvg_get_target (renderer->cr));
+  renderer->has_show_text_glyphs = FALSE; // vkvg_surface_has_show_text_glyphs (vkvg_get_target (renderer->cr));
 }
 
 static void
@@ -973,24 +959,24 @@ _pango_vkvg_do_glyph_item (VkvgContext cr,
   release_renderer (crenderer);
 }
 
-static void
-_pango_vkvg_do_layout_line (VkvgContext cr,
-			     PangoLayoutLine  *line,
-			     gboolean          do_path)
-{
-  PangoVkvgRenderer *crenderer = acquire_renderer ();
-  PangoRenderer *renderer = (PangoRenderer *) crenderer;
+// static void
+// _pango_vkvg_do_layout_line (VkvgContext cr,
+// 			     PangoLayoutLine  *line,
+// 			     gboolean          do_path)
+// {
+//   PangoVkvgRenderer *crenderer = acquire_renderer ();
+//   PangoRenderer *renderer = (PangoRenderer *) crenderer;
 
-  crenderer->cr = cr;
-  crenderer->do_path = do_path;
-  save_current_point (crenderer);
+//   crenderer->cr = cr;
+//   crenderer->do_path = do_path;
+//   save_current_point (crenderer);
 
-  pango_renderer_draw_layout_line (renderer, line, 0, 0);
+//   pango_renderer_draw_layout_line (renderer, line, 0, 0);
 
-  restore_current_point (crenderer);
+//   restore_current_point (crenderer);
 
-  release_renderer (crenderer);
-}
+//   release_renderer (crenderer);
+// }
 
 static void
 _pango_vkvg_do_layout (VkvgContext cr,
@@ -1011,28 +997,28 @@ _pango_vkvg_do_layout (VkvgContext cr,
   release_renderer (crenderer);
 }
 
-static void
-_pango_vkvg_do_error_underline (VkvgContext cr,
-				 double   x,
-				 double   y,
-				 double   width,
-				 double   height,
-				 gboolean do_path)
-{
-  /* We don't use a renderer here, for a simple reason:
-   * the only renderer we can get is the default renderer, that
-   * is all implemented here, so we shortcircuit and make our
-   * life way easier.
-   */
+// static void
+// _pango_vkvg_do_error_underline (VkvgContext cr,
+// 				 double   x,
+// 				 double   y,
+// 				 double   width,
+// 				 double   height,
+// 				 gboolean do_path)
+// {
+//   /* We don't use a renderer here, for a simple reason:
+//    * the only renderer we can get is the default renderer, that
+//    * is all implemented here, so we shortcircuit and make our
+//    * life way easier.
+//    */
 
-  if (!do_path)
-    vkvg_new_path (cr);
+//   if (!do_path)
+//     vkvg_new_path (cr);
 
-  draw_error_underline (cr, x, y, width, height);
+//   draw_error_underline (cr, x, y, width, height);
 
-  if (!do_path)
-    vkvg_fill (cr);
-}
+//   if (!do_path)
+//     vkvg_fill (cr);
+// }
 
 
 /* public wrapper of above to show or append path */
@@ -1040,7 +1026,7 @@ _pango_vkvg_do_error_underline (VkvgContext cr,
 
 /**
  * pango_vkvg_show_glyph_string:
- * @cr: a Vkvg context
+ * @ctx: a Vkvg context
  * @font: a `PangoFont` from a `PangoVkvgFontMap`
  * @glyphs: a `PangoGlyphString`
  *
@@ -1051,21 +1037,21 @@ _pango_vkvg_do_error_underline (VkvgContext cr,
  *
  * Since: 1.10
  */
-void
-pango_vkvg_show_glyph_string (VkvgContext cr,
-			       PangoFont        *font,
-			       PangoGlyphString *glyphs)
-{
-  g_return_if_fail (cr != NULL);
-  g_return_if_fail (glyphs != NULL);
+// void
+// pango_vkvg_show_glyph_string (VkvgContext cr,
+// 			       PangoFont        *font,
+// 			       PangoGlyphString *glyphs)
+// {
+//   g_return_if_fail (cr != NULL);
+//   g_return_if_fail (glyphs != NULL);
 
-  _pango_vkvg_do_glyph_string (cr, font, glyphs, FALSE);
-}
+//   _pango_vkvg_do_glyph_string (cr, font, glyphs, FALSE);
+// }
 
 
 /**
  * pango_vkvg_show_glyph_item:
- * @cr: a Vkvg context
+ * @ctx: a Vkvg context
  * @text: the UTF-8 text that @glyph_item refers to
  * @glyph_item: a `PangoGlyphItem`
  *
@@ -1083,21 +1069,21 @@ pango_vkvg_show_glyph_string (VkvgContext cr,
  *
  * Since: 1.22
  */
-void
-pango_vkvg_show_glyph_item (VkvgContext cr,
-			     const char       *text,
-			     PangoGlyphItem   *glyph_item)
-{
-  g_return_if_fail (cr != NULL);
-  g_return_if_fail (text != NULL);
-  g_return_if_fail (glyph_item != NULL);
+// void
+// pango_vkvg_show_glyph_item (VkvgContext cr,
+// 			     const char       *text,
+// 			     PangoGlyphItem   *glyph_item)
+// {
+//   g_return_if_fail (cr != NULL);
+//   g_return_if_fail (text != NULL);
+//   g_return_if_fail (glyph_item != NULL);
 
-  _pango_vkvg_do_glyph_item (cr, text, glyph_item, FALSE);
-}
+//   _pango_vkvg_do_glyph_item (cr, text, glyph_item, FALSE);
+// }
 
 /**
  * pango_vkvg_show_layout_line:
- * @cr: a Vkvg context
+ * @ctx: a Vkvg context
  * @line: a `PangoLayoutLine`
  *
  * Draws a `PangoLayoutLine` in the specified vkvg context.
@@ -1107,19 +1093,19 @@ pango_vkvg_show_glyph_item (VkvgContext cr,
  *
  * Since: 1.10
  */
-void
-pango_vkvg_show_layout_line (VkvgContext cr,
-			      PangoLayoutLine  *line)
-{
-  g_return_if_fail (cr != NULL);
-  g_return_if_fail (line != NULL);
+// void
+// pango_vkvg_show_layout_line (VkvgContext cr,
+// 			      PangoLayoutLine  *line)
+// {
+//   g_return_if_fail (cr != NULL);
+//   g_return_if_fail (line != NULL);
 
-  _pango_vkvg_do_layout_line (cr, line, FALSE);
-}
+//   _pango_vkvg_do_layout_line (cr, line, FALSE);
+// }
 
 /**
  * pango_vkvg_show_layout:
- * @cr: a Vkvg context
+ * @ctx: a Vkvg context
  * @layout: a Pango layout
  *
  * Draws a `PangoLayout` in the specified vkvg context.
@@ -1141,7 +1127,7 @@ pango_vkvg_show_layout (VkvgContext cr,
 
 /**
  * pango_vkvg_show_error_underline:
- * @cr: a Vkvg context
+ * @ctx: a Vkvg context
  * @x: The X coordinate of one corner of the rectangle
  * @y: The Y coordinate of one corner of the rectangle
  * @width: Non-negative width of the rectangle
@@ -1157,22 +1143,22 @@ pango_vkvg_show_layout (VkvgContext cr,
  *
  * Since: 1.14
  */
-void
-pango_vkvg_show_error_underline (VkvgContext cr,
-				  double  x,
-				  double  y,
-				  double  width,
-				  double  height)
-{
-  g_return_if_fail (cr != NULL);
-  g_return_if_fail ((width >= 0) && (height >= 0));
+// void
+// pango_vkvg_show_error_underline (VkvgContext cr,
+// 				  double  x,
+// 				  double  y,
+// 				  double  width,
+// 				  double  height)
+// {
+//   g_return_if_fail (cr != NULL);
+//   g_return_if_fail ((width >= 0) && (height >= 0));
 
-  _pango_vkvg_do_error_underline (cr, x, y, width, height, FALSE);
-}
+//   _pango_vkvg_do_error_underline (cr, x, y, width, height, FALSE);
+// }
 
 /**
  * pango_vkvg_glyph_string_path:
- * @cr: a Vkvg context
+ * @ctx: a Vkvg context
  * @font: a `PangoFont` from a `PangoVkvgFontMap`
  * @glyphs: a `PangoGlyphString`
  *
@@ -1184,20 +1170,20 @@ pango_vkvg_show_error_underline (VkvgContext cr,
  *
  * Since: 1.10
  */
-void
-pango_vkvg_glyph_string_path (VkvgContext cr,
-			       PangoFont        *font,
-			       PangoGlyphString *glyphs)
-{
-  g_return_if_fail (cr != NULL);
-  g_return_if_fail (glyphs != NULL);
+// void
+// pango_vkvg_glyph_string_path(VkvgContext       cr,
+//                              PangoFont        *font,
+//                              PangoGlyphString *glyphs)
+// {
+//   g_return_if_fail (cr != NULL);
+//   g_return_if_fail (glyphs != NULL);
 
-  _pango_vkvg_do_glyph_string (cr, font, glyphs, TRUE);
-}
+//   _pango_vkvg_do_glyph_string (cr, font, glyphs, TRUE);
+// }
 
 /**
  * pango_vkvg_layout_line_path:
- * @cr: a Vkvg context
+ * @ctx: a Vkvg context
  * @line: a `PangoLayoutLine`
  *
  * Adds the text in `PangoLayoutLine` to the current path in the
@@ -1208,19 +1194,19 @@ pango_vkvg_glyph_string_path (VkvgContext cr,
  *
  * Since: 1.10
  */
-void
-pango_vkvg_layout_line_path (VkvgContext cr,
-			      PangoLayoutLine  *line)
-{
-  g_return_if_fail (cr != NULL);
-  g_return_if_fail (line != NULL);
+// void
+// pango_vkvg_layout_line_path (VkvgContext cr,
+// 			      PangoLayoutLine  *line)
+// {
+//   g_return_if_fail (cr != NULL);
+//   g_return_if_fail (line != NULL);
 
-  _pango_vkvg_do_layout_line (cr, line, TRUE);
-}
+//   _pango_vkvg_do_layout_line (cr, line, TRUE);
+// }
 
 /**
  * pango_vkvg_layout_path:
- * @cr: a Vkvg context
+ * @ctx: a Vkvg context
  * @layout: a Pango layout
  *
  * Adds the text in a `PangoLayout` to the current path in the
@@ -1231,19 +1217,19 @@ pango_vkvg_layout_line_path (VkvgContext cr,
  *
  * Since: 1.10
  */
-void
-pango_vkvg_layout_path (VkvgContext cr,
-			 PangoLayout *layout)
-{
-  g_return_if_fail (cr != NULL);
-  g_return_if_fail (PANGO_IS_LAYOUT (layout));
+// void
+// pango_vkvg_layout_path (VkvgContext cr,
+// 			 PangoLayout *layout)
+// {
+//   g_return_if_fail (cr != NULL);
+//   g_return_if_fail (PANGO_IS_LAYOUT (layout));
 
-  _pango_vkvg_do_layout (cr, layout, TRUE);
-}
+//   _pango_vkvg_do_layout (cr, layout, TRUE);
+// }
 
 /**
  * pango_vkvg_error_underline_path:
- * @cr: a Vkvg context
+ * @ctx: a Vkvg context
  * @x: The X coordinate of one corner of the rectangle
  * @y: The Y coordinate of one corner of the rectangle
  * @width: Non-negative width of the rectangle
@@ -1258,15 +1244,15 @@ pango_vkvg_layout_path (VkvgContext cr,
  *
  * Since: 1.14
  */
-void
-pango_vkvg_error_underline_path (VkvgContext cr,
-				  double   x,
-				  double   y,
-				  double   width,
-				  double   height)
-{
-  g_return_if_fail (cr != NULL);
-  g_return_if_fail ((width >= 0) && (height >= 0));
+// void
+// pango_vkvg_error_underline_path (VkvgContext cr,
+// 				  double   x,
+// 				  double   y,
+// 				  double   width,
+// 				  double   height)
+// {
+//   g_return_if_fail (cr != NULL);
+//   g_return_if_fail ((width >= 0) && (height >= 0));
 
-  _pango_vkvg_do_error_underline (cr, x, y, width, height, TRUE);
-}
+//   _pango_vkvg_do_error_underline (cr, x, y, width, height, TRUE);
+// }
