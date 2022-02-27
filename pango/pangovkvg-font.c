@@ -50,15 +50,15 @@ _pango_vkvg_font_private_scaled_font_data_create (void)
   return g_slice_new (PangoVkvgFontPrivateScaledFontData);
 }
 
-static void
-_pango_vkvg_font_private_scaled_font_data_destroy (PangoVkvgFontPrivateScaledFontData *data)
-{
-  if (data)
-    {
-      vkvg_font_options_destroy (data->options);
-      g_slice_free (PangoVkvgFontPrivateScaledFontData, data);
-    }
-}
+// static void
+// _pango_vkvg_font_private_scaled_font_data_destroy (PangoVkvgFontPrivateScaledFontData *data)
+// {
+//   if (data)
+//     {
+//       vkvg_font_options_destroy (data->options);
+//       g_slice_free (PangoVkvgFontPrivateScaledFontData, data);
+//     }
+// }
 
 vkvg_scaled_font_t *
 _pango_vkvg_font_private_get_scaled_font (PangoVkvgFontPrivate *cf_priv)
@@ -82,8 +82,8 @@ _pango_vkvg_font_private_get_scaled_font (PangoVkvgFontPrivate *cf_priv)
 
   cf_priv->scaled_font = vkvg_scaled_font_create (font_face,
 						   &cf_priv->data->font_matrix,
-						   &cf_priv->data->ctm,
-						   cf_priv->data->options);
+						   &cf_priv->data->ctm //,
+						   ); // cf_priv->data->options);
 
   vkvg_font_face_destroy (font_face);
 
@@ -129,7 +129,7 @@ done:
 	}
     }
 
-  _pango_vkvg_font_private_scaled_font_data_destroy (cf_priv->data);
+  // _pango_vkvg_font_private_scaled_font_data_destroy (cf_priv->data);
   cf_priv->data = NULL;
 
   return cf_priv->scaled_font;
@@ -164,7 +164,7 @@ pango_vkvg_font_get_scaled_font (PangoVkvgFont *cfont)
 /**
  * _pango_vkvg_font_install:
  * @font: a `PangoVkvgFont`
- * @cr: a #vkvg_t
+ * @ctx: a #vkvg_t
  *
  * Makes @font the current font for rendering in the specified
  * Vkvg context.
@@ -274,7 +274,7 @@ _pango_vkvg_font_get_metrics (PangoFont     *font,
 
       font_options = vkvg_font_options_create ();
       vkvg_scaled_font_get_font_options (scaled_font, font_options);
-      pango_vkvg_context_set_font_options (context, font_options);
+      // pango_vkvg_context_set_font_options (context, font_options);
       vkvg_font_options_destroy (font_options);
 
       info->metrics = (* PANGO_VKVG_FONT_GET_IFACE (font)->create_base_metrics_for_context) (cfont, context);
@@ -496,7 +496,7 @@ _pango_vkvg_font_private_get_hex_box_info (PangoVkvgFontPrivate *cf_priv)
 
     pango_context_set_matrix (context, &pango_ctm);
     pango_context_set_language (context, pango_script_get_sample_language (PANGO_SCRIPT_LATIN));
-    pango_vkvg_context_set_font_options (context, font_options);
+    // pango_vkvg_context_set_font_options (context, font_options);
     mini_font = pango_font_map_load_font (fontmap, context, desc);
 
     g_object_unref (context);
@@ -504,7 +504,7 @@ _pango_vkvg_font_private_get_hex_box_info (PangoVkvgFontPrivate *cf_priv)
   }
 
   pango_font_description_free (desc);
-  vkvg_font_options_destroy (font_options);
+  // vkvg_font_options_destroy (font_options);
 
 
   scaled_mini_font = pango_vkvg_font_get_scaled_font ((PangoVkvgFont *) mini_font);
@@ -597,7 +597,7 @@ void
 _pango_vkvg_font_private_initialize (PangoVkvgFontPrivate      *cf_priv,
 				      PangoVkvgFont             *cfont,
 				      PangoGravity                gravity,
-				      const vkvg_font_options_t *font_options,
+				      // const vkvg_font_options_t *font_options,
 				      const PangoMatrix          *pango_ctm,
 				      const vkvg_matrix_t       *font_matrix)
 {
@@ -628,8 +628,8 @@ _pango_vkvg_font_private_initialize (PangoVkvgFontPrivate      *cf_priv,
   else
     vkvg_matrix_init_identity (&cf_priv->data->ctm);
 
-  cf_priv->data->options = vkvg_font_options_copy (font_options);
-  cf_priv->is_hinted = vkvg_font_options_get_hint_metrics (font_options) != CAIRO_HINT_METRICS_OFF;
+  // cf_priv->data->options = vkvg_font_options_copy (font_options);
+  cf_priv->is_hinted = vkvg_font_options_get_hint_metrics (font_options) != VKVG_HINT_METRICS_OFF;
 
   cf_priv->scaled_font = NULL;
   cf_priv->hbi = NULL;
@@ -647,7 +647,7 @@ free_metrics_info (PangoVkvgFontMetricsInfo *info)
 void
 _pango_vkvg_font_private_finalize (PangoVkvgFontPrivate *cf_priv)
 {
-  _pango_vkvg_font_private_scaled_font_data_destroy (cf_priv->data);
+  // _pango_vkvg_font_private_scaled_font_data_destroy (cf_priv->data);
 
   if (cf_priv->scaled_font)
     vkvg_scaled_font_destroy (cf_priv->scaled_font);
@@ -834,11 +834,11 @@ compute_glyph_extents (PangoVkvgFontPrivate  *cf_priv,
 		       PangoVkvgFontGlyphExtentsCacheEntry *entry)
 {
   vkvg_text_extents_t extents;
-  vkvg_glyph_t vkvg_glyph;
+  vkvg_glyph_info_t vkvg_glyph;
 
-  vkvg_glyph.index = glyph;
-  vkvg_glyph.x = 0;
-  vkvg_glyph.y = 0;
+  vkvg_glyph.codepoint = glyph;
+  vkvg_glyph.x_offset = 0;
+  vkvg_glyph.y_offset = 0;
 
   vkvg_scaled_font_glyph_extents (_pango_vkvg_font_private_get_scaled_font (cf_priv),
 				   &vkvg_glyph, 1, &extents);
