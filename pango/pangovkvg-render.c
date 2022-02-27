@@ -467,8 +467,8 @@ pango_vkvg_renderer_show_text_glyphs(PangoRenderer       *renderer,
           _pango_vkvg_renderer_draw_unknown_glyph (crenderer, font, gi, cx, cy);
       } else {
         vkvg_glyphs[count].codepoint = gi->glyph;
-        vkvg_glyphs[count].x_offset = cx; // x_advance?
-        vkvg_glyphs[count].y_offset = cy; // y_advance?
+        vkvg_glyphs[count].x_offset = cx;
+        vkvg_glyphs[count].y_offset = cy;
         count++;
       }
     }
