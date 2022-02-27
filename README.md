@@ -4,7 +4,15 @@ Source code of `pangocairo` taken from the [Pango repository](https://gitlab.gno
 
 ## Notes
 
-I am reimplementing few functions at a time, everything else is commented out. Currently it doesn't compile.
+I am reimplementing few functions at a time, at the moment:
+
+* `pango_vkvg_create_layout`
+* `pango_vkvg_update_layout`
+* `pango_vkvg_show_layout`
+
+and all their dependencies.
+
+Currently it doesn't compile.
 
 ## License
 
