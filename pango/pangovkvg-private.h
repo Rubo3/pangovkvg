@@ -39,6 +39,8 @@ struct _PangoVkvgFontMapIface
   void           (*set_resolution) (PangoVkvgFontMap *fontmap,
 				    double             dpi);
   double         (*get_resolution) (PangoVkvgFontMap *fontmap);
+
+  // vkvg_font_type_t (*get_font_type) (PangoVkvgFontMap *fontmap);
 };
 
 
