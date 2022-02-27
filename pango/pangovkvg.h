@@ -203,6 +203,10 @@ typedef struct {
     int num_glyphs;
 } vkvg_text_cluster_t;
 
+typedef enum _vkvg_text_cluster_flags {
+    VKVG_TEXT_CLUSTER_FLAG_BACKWARD = 0x00000001
+} vkvg_text_cluster_flags_t;
+
 G_END_DECLS
 
 #endif /* __PANGOVKVG_H__ */
