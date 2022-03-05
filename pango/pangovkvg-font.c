@@ -436,7 +436,7 @@ _pango_vkvg_font_private_get_hex_box_info (PangoVkvgFontPrivate *cf_priv)
   if (is_hinted)
     {
       /* prepare for some hinting */
-      double x, y;
+      float x, y; // cairo expects two doubles, vkvg two floats
 
       x = 1.; y = 0.;
       vkvg_matrix_transform_distance (&vkvg_ctm, &x, &y);
