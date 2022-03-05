@@ -859,10 +859,15 @@ static void
 save_current_point (PangoVkvgRenderer *renderer)
 {
   renderer->cr_had_current_point = vkvg_has_current_point (renderer->cr);
-  vkvg_get_current_point (renderer->cr, &renderer->x_offset, &renderer->y_offset);
+
+  float x_offset = 0;
+  float y_offset = 0;
+  vkvg_get_current_point (renderer->cr, &x_offset, &y_offset);
+  renderer->x_offset = x_offset;
+  renderer->y_offset = y_offset;
 
   /* abuse save_current_point() to cache vkvg_has_show_text_glyphs() result */
-  renderer->has_show_text_glyphs = FALSE; // vkvg_surface_has_show_text_glyphs (vkvg_get_target (renderer->cr));
+  renderer->has_show_text_glyphs = TRUE; // vkvg_surface_has_show_text_glyphs (vkvg_get_target (renderer->cr));
 }
 
 static void
