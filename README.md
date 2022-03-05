@@ -1,6 +1,6 @@
 # pangovkvg
 
-Source code of `pangocairo` taken from the [Pango repository](https://gitlab.gnome.org/GNOME/pango) and currently being modified to use [`vkvg`](https://github.com/jpbruyere/vkvg) instead of [`cairo`](https://github.com/freedesktop/cairo).
+Source code of `pangocairo` taken from the [Pango repository](https://gitlab.gnome.org/GNOME/pango) and currently being modified to use [`vkvg`](https://github.com/jpbruyere/vkvg) instead of [`cairo`](https://gitlab.freedesktop.org/cairo/cairo).
 
 ## Notes
 
