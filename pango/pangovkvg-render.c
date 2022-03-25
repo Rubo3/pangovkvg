@@ -23,10 +23,10 @@
 
 #include <math.h>
 
-#include "pango-font-private.h"
+#include <pango/pango-glyph-item.h>
+#include "pango/pango-font-private.h"
+#include "pango/pango-impl-utils.h"
 #include "pangovkvg-private.h"
-#include "pango-glyph-item.h"
-#include "pango-impl-utils.h"
 
 typedef struct _PangoVkvgRendererClass PangoVkvgRendererClass;
 
@@ -59,39 +59,39 @@ static void
 set_color (PangoVkvgRenderer *crenderer,
 	   PangoRenderPart     part)
 {
-  PangoColor *color = pango_renderer_get_color ((PangoRenderer *) (crenderer), part);
-  guint16 a = pango_renderer_get_alpha ((PangoRenderer *) (crenderer), part);
-  gdouble red, green, blue, alpha;
+  // PangoColor *color = pango_renderer_get_color ((PangoRenderer *) (crenderer), part);
+  // guint16 a = pango_renderer_get_alpha ((PangoRenderer *) (crenderer), part);
+  // gdouble red, green, blue, alpha;
 
-  if (!a && !color)
-    return;
+  // if (!a && !color)
+  //   return;
 
-  if (color)
-    {
-      red = color->red / 65535.;
-      green = color->green / 65535.;
-      blue = color->blue / 65535.;
-      alpha = 1.;
-    }
-  else
-    {
-      VkvgPattern pattern = vkvg_get_source (crenderer->cr);
+  // if (color)
+  //   {
+  //     red = color->red / 65535.;
+  //     green = color->green / 65535.;
+  //     blue = color->blue / 65535.;
+  //     alpha = 1.;
+  //   }
+  // else
+  //   {
+  //     VkvgPattern pattern = vkvg_get_source (crenderer->cr);
 
-      if (pattern && vkvg_pattern_get_type (pattern) == VKVG_PATTERN_TYPE_SOLID)
-        vkvg_pattern_get_rgba (pattern, &red, &green, &blue, &alpha);
-      else
-        {
-          red = 0.;
-          green = 0.;
-          blue = 0.;
-          alpha = 1.;
-        }
-    }
+  //     if (pattern && vkvg_pattern_get_type (pattern) == VKVG_PATTERN_TYPE_SOLID)
+  //       vkvg_pattern_get_rgba (pattern, &red, &green, &blue, &alpha);
+  //     else
+  //       {
+  //         red = 0.;
+  //         green = 0.;
+  //         blue = 0.;
+  //         alpha = 1.;
+  //       }
+  //   }
 
-  if (a)
-    alpha = a / 65535.;
+  // if (a)
+  //   alpha = a / 65535.;
 
-  vkvg_set_source_rgba (crenderer->cr, red, green, blue, alpha);
+  // vkvg_set_source_rgba (crenderer->cr, red, green, blue, alpha);
 }
 
 /* note: modifies crenderer->cr without doing vkvg_save/restore() */
@@ -232,167 +232,167 @@ _pango_vkvg_renderer_draw_unknown_glyph (PangoVkvgRenderer *crenderer,
 					  double              cx,
 					  double              cy)
 {
-  char buf[7];
-  double x0, y0;
-  int row, col;
-  int rows, cols;
-  double width, lsb;
-  char hexbox_string[2] = { 0, 0 };
-  PangoVkvgFontHexBoxInfo *hbi;
-  gunichar ch;
-  gboolean invalid_input;
-  const char *p;
-  const char *name;
+//   char buf[7];
+//   double x0, y0;
+//   int row, col;
+//   int rows, cols;
+//   double width, lsb;
+//   char hexbox_string[2] = { 0, 0 };
+//   PangoVkvgFontHexBoxInfo *hbi;
+//   gunichar ch;
+//   gboolean invalid_input;
+//   const char *p;
+//   const char *name;
 
-  vkvg_save (crenderer->cr);
+//   vkvg_save (crenderer->cr);
 
-  ch = gi->glyph & ~PANGO_GLYPH_UNKNOWN_FLAG;
-  invalid_input = G_UNLIKELY (gi->glyph == PANGO_GLYPH_INVALID_INPUT || ch > 0x10FFFF);
+//   ch = gi->glyph & ~PANGO_GLYPH_UNKNOWN_FLAG;
+//   invalid_input = G_UNLIKELY (gi->glyph == PANGO_GLYPH_INVALID_INPUT || ch > 0x10FFFF);
 
-  hbi = _pango_vkvg_font_get_hex_box_info ((PangoVkvgFont *)font);
-  if (!hbi || !_pango_vkvg_font_install ((PangoFont *)(hbi->font), crenderer->cr))
-    {
-      _pango_vkvg_renderer_draw_box_glyph (crenderer, gi, cx, cy, invalid_input);
-      goto done;
-    }
+//   hbi = _pango_vkvg_font_get_hex_box_info ((PangoVkvgFont *)font);
+//   if (!hbi || !_pango_vkvg_font_install ((PangoFont *)(hbi->font), crenderer->cr))
+//     {
+//       _pango_vkvg_renderer_draw_box_glyph (crenderer, gi, cx, cy, invalid_input);
+//       goto done;
+//     }
 
-  if (G_UNLIKELY (invalid_input))
-    {
-      rows = hbi->rows;
-      cols = 1;
-    }
-  else if (ch == 0x2423 ||
-           g_unichar_type (ch) == G_UNICODE_SPACE_SEPARATOR)
-    {
-      /* We never want to show a hex box or other drawing for
-       * space. If we want space to be visible, we replace 0x20
-       * by 0x2423 (visible space).
-       *
-       * Since we don't want to rely on glyph availability,
-       * we render a centered dot ourselves.
-       */
-      double x = cx + 0.5 *((double)gi->geometry.width / PANGO_SCALE);
-      double y = cy + hbi->box_descent - 0.5 * hbi->box_height;
+//   if (G_UNLIKELY (invalid_input))
+//     {
+//       rows = hbi->rows;
+//       cols = 1;
+//     }
+//   else if (ch == 0x2423 ||
+//            g_unichar_type (ch) == G_UNICODE_SPACE_SEPARATOR)
+//     {
+//       /* We never want to show a hex box or other drawing for
+//        * space. If we want space to be visible, we replace 0x20
+//        * by 0x2423 (visible space).
+//        *
+//        * Since we don't want to rely on glyph availability,
+//        * we render a centered dot ourselves.
+//        */
+//       double x = cx + 0.5 *((double)gi->geometry.width / PANGO_SCALE);
+//       double y = cy + hbi->box_descent - 0.5 * hbi->box_height;
 
-      vkvg_new_sub_path (crenderer->cr);
-      vkvg_arc (crenderer->cr, x, y, 1.5 * hbi->line_width, 0, 2 * G_PI);
-      vkvg_close_path (crenderer->cr);
-      vkvg_fill (crenderer->cr);
-      goto done;
-    }
-  else if (ch == '\t')
-    {
-      /* Since we don't want to rely on glyph availability,
-       * we render an arrow like ↦ ourselves.
-       */
-      double y = cy + hbi->box_descent - 0.5 * hbi->box_height;
-      double width = (double)gi->geometry.width / PANGO_SCALE;
-      double offset = 0.2 * width;
-      double x = cx + offset;
-      double al = width - 2 * offset; /* arrow length */
-      double tl = MIN (hbi->digit_width, 0.75 * al); /* tip length */
-      double tw2 = 2.5 * hbi->line_width; /* tip width / 2 */
-      double lw2 = 0.5 * hbi->line_width; /* line width / 2 */
+//       vkvg_new_sub_path (crenderer->cr);
+//       vkvg_arc (crenderer->cr, x, y, 1.5 * hbi->line_width, 0, 2 * G_PI);
+//       vkvg_close_path (crenderer->cr);
+//       vkvg_fill (crenderer->cr);
+//       goto done;
+//     }
+//   else if (ch == '\t')
+//     {
+//       /* Since we don't want to rely on glyph availability,
+//        * we render an arrow like ↦ ourselves.
+//        */
+//       double y = cy + hbi->box_descent - 0.5 * hbi->box_height;
+//       double width = (double)gi->geometry.width / PANGO_SCALE;
+//       double offset = 0.2 * width;
+//       double x = cx + offset;
+//       double al = width - 2 * offset; /* arrow length */
+//       double tl = MIN (hbi->digit_width, 0.75 * al); /* tip length */
+//       double tw2 = 2.5 * hbi->line_width; /* tip width / 2 */
+//       double lw2 = 0.5 * hbi->line_width; /* line width / 2 */
 
-      vkvg_move_to (crenderer->cr, x - lw2, y - tw2);
-      vkvg_line_to (crenderer->cr, x + lw2, y - tw2);
-      vkvg_line_to (crenderer->cr, x + lw2, y - lw2);
-      vkvg_line_to (crenderer->cr, x + al - tl, y - lw2);
-      vkvg_line_to (crenderer->cr, x + al - tl, y - tw2);
-      vkvg_line_to (crenderer->cr, x + al,  y);
-      vkvg_line_to (crenderer->cr, x + al - tl, y + tw2);
-      vkvg_line_to (crenderer->cr, x + al - tl, y + lw2);
-      vkvg_line_to (crenderer->cr, x + lw2, y + lw2);
-      vkvg_line_to (crenderer->cr, x + lw2, y + tw2);
-      vkvg_line_to (crenderer->cr, x - lw2, y + tw2);
-      vkvg_close_path (crenderer->cr);
-      vkvg_fill (crenderer->cr);
-      goto done;
-    }
-  else if (ch == '\n' || ch == 0x2028 || ch == 0x2029)
-    {
-      /* Since we don't want to rely on glyph availability,
-       * we render an arrow like ↵ ourselves.
-       */
-      double width = (double)gi->geometry.width / PANGO_SCALE;
-      double offset = 0.2 * width;
-      double al = width - 2 * offset; /* arrow length */
-      double tl = MIN (hbi->digit_width, 0.75 * al); /* tip length */
-      double ah = al - 0.5 * tl; /* arrow height */
-      double tw2 = 2.5 * hbi->line_width; /* tip width / 2 */
-      double x = cx + offset;
-      double y = cy - (hbi->box_height - al) / 2;
-      double lw2 = 0.5 * hbi->line_width; /* line width / 2 */
+//       vkvg_move_to (crenderer->cr, x - lw2, y - tw2);
+//       vkvg_line_to (crenderer->cr, x + lw2, y - tw2);
+//       vkvg_line_to (crenderer->cr, x + lw2, y - lw2);
+//       vkvg_line_to (crenderer->cr, x + al - tl, y - lw2);
+//       vkvg_line_to (crenderer->cr, x + al - tl, y - tw2);
+//       vkvg_line_to (crenderer->cr, x + al,  y);
+//       vkvg_line_to (crenderer->cr, x + al - tl, y + tw2);
+//       vkvg_line_to (crenderer->cr, x + al - tl, y + lw2);
+//       vkvg_line_to (crenderer->cr, x + lw2, y + lw2);
+//       vkvg_line_to (crenderer->cr, x + lw2, y + tw2);
+//       vkvg_line_to (crenderer->cr, x - lw2, y + tw2);
+//       vkvg_close_path (crenderer->cr);
+//       vkvg_fill (crenderer->cr);
+//       goto done;
+//     }
+//   else if (ch == '\n' || ch == 0x2028 || ch == 0x2029)
+//     {
+//       /* Since we don't want to rely on glyph availability,
+//        * we render an arrow like ↵ ourselves.
+//        */
+//       double width = (double)gi->geometry.width / PANGO_SCALE;
+//       double offset = 0.2 * width;
+//       double al = width - 2 * offset; /* arrow length */
+//       double tl = MIN (hbi->digit_width, 0.75 * al); /* tip length */
+//       double ah = al - 0.5 * tl; /* arrow height */
+//       double tw2 = 2.5 * hbi->line_width; /* tip width / 2 */
+//       double x = cx + offset;
+//       double y = cy - (hbi->box_height - al) / 2;
+//       double lw2 = 0.5 * hbi->line_width; /* line width / 2 */
 
-      vkvg_move_to (crenderer->cr, x, y);
-      vkvg_line_to (crenderer->cr, x + tl, y - tw2);
-      vkvg_line_to (crenderer->cr, x + tl, y - lw2);
-      vkvg_line_to (crenderer->cr, x + al - lw2, y - lw2);
-      vkvg_line_to (crenderer->cr, x + al - lw2, y - ah);
-      vkvg_line_to (crenderer->cr, x + al + lw2, y - ah);
-      vkvg_line_to (crenderer->cr, x + al + lw2, y + lw2);
-      vkvg_line_to (crenderer->cr, x + tl, y + lw2);
-      vkvg_line_to (crenderer->cr, x + tl, y + tw2);
-      vkvg_close_path (crenderer->cr);
-      vkvg_fill (crenderer->cr);
-      goto done;
-    }
-  else if ((name = pango_get_ignorable_size (ch, &rows, &cols)))
-    {
-      /* Nothing else to do, we render 'default ignorable' chars
-       * as hex box with their nick.
-       */
-    }
-  else
-    {
-      /* Everything else gets a traditional hex box. */
-      rows = hbi->rows;
-      cols = (ch > 0xffff ? 6 : 4) / rows;
-      g_snprintf (buf, sizeof(buf), (ch > 0xffff) ? "%06X" : "%04X", ch);
-      name = buf;
-    }
+//       vkvg_move_to (crenderer->cr, x, y);
+//       vkvg_line_to (crenderer->cr, x + tl, y - tw2);
+//       vkvg_line_to (crenderer->cr, x + tl, y - lw2);
+//       vkvg_line_to (crenderer->cr, x + al - lw2, y - lw2);
+//       vkvg_line_to (crenderer->cr, x + al - lw2, y - ah);
+//       vkvg_line_to (crenderer->cr, x + al + lw2, y - ah);
+//       vkvg_line_to (crenderer->cr, x + al + lw2, y + lw2);
+//       vkvg_line_to (crenderer->cr, x + tl, y + lw2);
+//       vkvg_line_to (crenderer->cr, x + tl, y + tw2);
+//       vkvg_close_path (crenderer->cr);
+//       vkvg_fill (crenderer->cr);
+//       goto done;
+//     }
+//   else if ((name = pango_get_ignorable_size (ch, &rows, &cols)))
+//     {
+//       /* Nothing else to do, we render 'default ignorable' chars
+//        * as hex box with their nick.
+//        */
+//     }
+//   else
+//     {
+//       /* Everything else gets a traditional hex box. */
+//       rows = hbi->rows;
+//       cols = (ch > 0xffff ? 6 : 4) / rows;
+//       g_snprintf (buf, sizeof(buf), (ch > 0xffff) ? "%06X" : "%04X", ch);
+//       name = buf;
+//     }
 
-  width = (3 * hbi->pad_x + cols * (hbi->digit_width + hbi->pad_x));
-  lsb = ((double)gi->geometry.width / PANGO_SCALE - width) * .5;
-  lsb = floor (lsb / hbi->pad_x) * hbi->pad_x;
+//   width = (3 * hbi->pad_x + cols * (hbi->digit_width + hbi->pad_x));
+//   lsb = ((double)gi->geometry.width / PANGO_SCALE - width) * .5;
+//   lsb = floor (lsb / hbi->pad_x) * hbi->pad_x;
 
-  _pango_vkvg_renderer_draw_frame (crenderer,
-				    cx + lsb + .5 * hbi->pad_x,
-				    cy + hbi->box_descent - hbi->box_height + hbi->pad_y * 0.5,
-				    width - hbi->pad_x,
-				    (hbi->box_height - hbi->pad_y),
-				    hbi->line_width,
-				    invalid_input);
+//   _pango_vkvg_renderer_draw_frame (crenderer,
+// 				    cx + lsb + .5 * hbi->pad_x,
+// 				    cy + hbi->box_descent - hbi->box_height + hbi->pad_y * 0.5,
+// 				    width - hbi->pad_x,
+// 				    (hbi->box_height - hbi->pad_y),
+// 				    hbi->line_width,
+// 				    invalid_input);
 
-  if (invalid_input)
-    goto done;
+//   if (invalid_input)
+//     goto done;
 
-  x0 = cx + lsb + hbi->pad_x * 2;
-  y0 = cy + hbi->box_descent - hbi->pad_y * 2 - ((hbi->rows - rows) * hbi->digit_height / 2);
+//   x0 = cx + lsb + hbi->pad_x * 2;
+//   y0 = cy + hbi->box_descent - hbi->pad_y * 2 - ((hbi->rows - rows) * hbi->digit_height / 2);
 
-  for (row = 0, p = name; row < rows; row++)
-    {
-      double y = y0 - (rows - 1 - row) * (hbi->digit_height + hbi->pad_y);
-      for (col = 0; col < cols; col++, p++)
-	{
-	  double x = x0 + col * (hbi->digit_width + hbi->pad_x);
+//   for (row = 0, p = name; row < rows; row++)
+//     {
+//       double y = y0 - (rows - 1 - row) * (hbi->digit_height + hbi->pad_y);
+//       for (col = 0; col < cols; col++, p++)
+// 	{
+// 	  double x = x0 + col * (hbi->digit_width + hbi->pad_x);
 
-          if (!p)
-            goto done;
+//           if (!p)
+//             goto done;
 
-	  vkvg_move_to (crenderer->cr, x, y);
+// 	  vkvg_move_to (crenderer->cr, x, y);
 
-          hexbox_string[0] = p[0];
+//           hexbox_string[0] = p[0];
 
-	  if (crenderer->do_path)
-	      vkvg_text_path (crenderer->cr, hexbox_string);
-	  else
-	      vkvg_show_text (crenderer->cr, hexbox_string);
-	}
-    }
+// 	  if (crenderer->do_path)
+// 	      vkvg_text_path (crenderer->cr, hexbox_string);
+// 	  else
+// 	      vkvg_show_text (crenderer->cr, hexbox_string);
+// 	}
+//     }
 
-done:
-  vkvg_restore (crenderer->cr);
+// done:
+//   vkvg_restore (crenderer->cr);
 }
 
 #ifndef STACK_BUFFER_SIZE
@@ -413,84 +413,84 @@ pango_vkvg_renderer_show_text_glyphs(PangoRenderer       *renderer,
                                      int                  x,
                                      int                  y)
 {
-  PangoVkvgRenderer *crenderer = (PangoVkvgRenderer *) (renderer);
+//   PangoVkvgRenderer *crenderer = (PangoVkvgRenderer *) (renderer);
 
-  int i, count;
-  int x_position = 0;
-  vkvg_glyph_info_t *vkvg_glyphs;
-  vkvg_glyph_info_t  stack_glyphs[STACK_ARRAY_LENGTH (vkvg_glyph_info_t)];
-  double base_x = crenderer->x_offset + (double)x / PANGO_SCALE;
-  double base_y = crenderer->y_offset + (double)y / PANGO_SCALE;
+//   int i, count;
+//   int x_position = 0;
+//   vkvg_glyph_info_t *vkvg_glyphs;
+//   vkvg_glyph_info_t  stack_glyphs[STACK_ARRAY_LENGTH (vkvg_glyph_info_t)];
+//   double base_x = crenderer->x_offset + (double)x / PANGO_SCALE;
+//   double base_y = crenderer->y_offset + (double)y / PANGO_SCALE;
 
-  vkvg_save (crenderer->cr);
-  if (!crenderer->do_path)
-    set_color (crenderer, PANGO_RENDER_PART_FOREGROUND);
+//   vkvg_save (crenderer->cr);
+//   if (!crenderer->do_path)
+//     set_color (crenderer, PANGO_RENDER_PART_FOREGROUND);
 
-  if (!_pango_vkvg_font_install (font, crenderer->cr)) {
-    for (i = 0; i < glyphs->num_glyphs; i++) {
-	    PangoGlyphInfo *gi = &glyphs->glyphs[i];
+//   if (!_pango_vkvg_font_install (font, crenderer->cr)) {
+//     for (i = 0; i < glyphs->num_glyphs; i++) {
+// 	    PangoGlyphInfo *gi = &glyphs->glyphs[i];
 
-      if (gi->glyph != PANGO_GLYPH_EMPTY)
-        {
-          double cx = base_x + (double)(x_position + gi->geometry.x_offset) / PANGO_SCALE;
-          double cy = gi->geometry.y_offset == 0 ?
-          base_y :
-          base_y + (double)(gi->geometry.y_offset) / PANGO_SCALE;
+//       if (gi->glyph != PANGO_GLYPH_EMPTY)
+//         {
+//           double cx = base_x + (double)(x_position + gi->geometry.x_offset) / PANGO_SCALE;
+//           double cy = gi->geometry.y_offset == 0 ?
+//           base_y :
+//           base_y + (double)(gi->geometry.y_offset) / PANGO_SCALE;
 
-          _pango_vkvg_renderer_draw_unknown_glyph (crenderer, font, gi, cx, cy);
-        }
-      x_position += gi->geometry.width;
-    }
+//           _pango_vkvg_renderer_draw_unknown_glyph (crenderer, font, gi, cx, cy);
+//         }
+//       x_position += gi->geometry.width;
+//     }
 
-    goto done;
-  }
+//     goto done;
+//   }
 
-  if (glyphs->num_glyphs > (int) G_N_ELEMENTS (stack_glyphs))
-    vkvg_glyphs = g_new (vkvg_glyph_info_t, glyphs->num_glyphs);
-  else
-    vkvg_glyphs = stack_glyphs;
+//   if (glyphs->num_glyphs > (int) G_N_ELEMENTS (stack_glyphs))
+//     vkvg_glyphs = g_new (vkvg_glyph_info_t, glyphs->num_glyphs);
+//   else
+//     vkvg_glyphs = stack_glyphs;
 
-  count = 0;
-  for (i = 0; i < glyphs->num_glyphs; i++) {
-    PangoGlyphInfo *gi = &glyphs->glyphs[i];
+//   count = 0;
+//   for (i = 0; i < glyphs->num_glyphs; i++) {
+//     PangoGlyphInfo *gi = &glyphs->glyphs[i];
 
-    if (gi->glyph != PANGO_GLYPH_EMPTY) {
-      double cx = base_x + (double)(x_position + gi->geometry.x_offset) / PANGO_SCALE;
-      double cy = gi->geometry.y_offset == 0 ?
-          base_y :
-          base_y + (double)(gi->geometry.y_offset) / PANGO_SCALE;
+//     if (gi->glyph != PANGO_GLYPH_EMPTY) {
+//       double cx = base_x + (double)(x_position + gi->geometry.x_offset) / PANGO_SCALE;
+//       double cy = gi->geometry.y_offset == 0 ?
+//           base_y :
+//           base_y + (double)(gi->geometry.y_offset) / PANGO_SCALE;
 
-      if (gi->glyph & PANGO_GLYPH_UNKNOWN_FLAG) {
-        if (gi->glyph == (0x20 | PANGO_GLYPH_UNKNOWN_FLAG))
-          ; /* no hex boxes for space, please */
-        else
-          _pango_vkvg_renderer_draw_unknown_glyph (crenderer, font, gi, cx, cy);
-      } else {
-        vkvg_glyphs[count].codepoint = gi->glyph;
-        vkvg_glyphs[count].x_offset = cx;
-        vkvg_glyphs[count].y_offset = cy;
-        count++;
-      }
-    }
-    x_position += gi->geometry.width;
-  }
+//       if (gi->glyph & PANGO_GLYPH_UNKNOWN_FLAG) {
+//         if (gi->glyph == (0x20 | PANGO_GLYPH_UNKNOWN_FLAG))
+//           ; /* no hex boxes for space, please */
+//         else
+//           _pango_vkvg_renderer_draw_unknown_glyph (crenderer, font, gi, cx, cy);
+//       } else {
+//         vkvg_glyphs[count].codepoint = gi->glyph;
+//         vkvg_glyphs[count].x_offset = cx;
+//         vkvg_glyphs[count].y_offset = cy;
+//         count++;
+//       }
+//     }
+//     x_position += gi->geometry.width;
+//   }
 
-  if (G_UNLIKELY (crenderer->do_path))
-    vkvg_glyph_path(crenderer->cr, vkvg_glyphs, count);
-  else if (G_UNLIKELY (clusters))
-    vkvg_show_text_glyphs(crenderer->cr,
-			                    text, text_len,
-			                    vkvg_glyphs, count,
-			                    clusters, num_clusters,
-			                    backward ? VKVG_TEXT_CLUSTER_FLAG_BACKWARD : 0);
-  else
-    vkvg_show_glyphs (crenderer->cr, vkvg_glyphs, count);
+//   if (G_UNLIKELY (crenderer->do_path))
+//     vkvg_glyph_path(crenderer->cr, vkvg_glyphs, count);
+//   else if (G_UNLIKELY (clusters))
+//     vkvg_show_text_glyphs(crenderer->cr,
+// 			                    text, text_len,
+// 			                    vkvg_glyphs, count,
+// 			                    clusters, num_clusters,
+// 			                    backward ? VKVG_TEXT_CLUSTER_FLAG_BACKWARD : 0);
+//   else
+//     vkvg_show_glyphs (crenderer->cr, vkvg_glyphs, count);
 
-  if (vkvg_glyphs != stack_glyphs)
-    g_free (vkvg_glyphs);
+//   if (vkvg_glyphs != stack_glyphs)
+//     g_free (vkvg_glyphs);
 
-done:
-  vkvg_restore (crenderer->cr);
+// done:
+//   vkvg_restore (crenderer->cr);
 }
 
 static void
@@ -500,7 +500,7 @@ pango_vkvg_renderer_draw_glyphs(PangoRenderer    *renderer,
                                 int               x,
                                 int               y)
 {
-  pango_vkvg_renderer_show_text_glyphs (renderer, NULL, 0, glyphs, NULL, 0, FALSE, font, x, y);
+  // pango_vkvg_renderer_show_text_glyphs (renderer, NULL, 0, glyphs, NULL, 0, FALSE, font, x, y);
 }
 
 static void
@@ -510,76 +510,76 @@ pango_vkvg_renderer_draw_glyph_item (PangoRenderer     *renderer,
 				      int                x,
 				      int                y)
 {
-  PangoVkvgRenderer *crenderer = (PangoVkvgRenderer *) (renderer);
-  PangoFont          *font      = glyph_item->item->analysis.font;
-  PangoGlyphString   *glyphs    = glyph_item->glyphs;
-  PangoItem          *item      = glyph_item->item;
-  gboolean            backward  = (item->analysis.level & 1) != 0;
+  // PangoVkvgRenderer *crenderer = (PangoVkvgRenderer *) (renderer);
+  // PangoFont          *font      = glyph_item->item->analysis.font;
+  // PangoGlyphString   *glyphs    = glyph_item->glyphs;
+  // PangoItem          *item      = glyph_item->item;
+  // gboolean            backward  = (item->analysis.level & 1) != 0;
 
-  PangoGlyphItemIter   iter;
-  vkvg_text_cluster_t *vkvg_clusters;
-  vkvg_text_cluster_t  stack_clusters[STACK_ARRAY_LENGTH (vkvg_text_cluster_t)];
-  int num_clusters;
+  // PangoGlyphItemIter   iter;
+  // vkvg_text_cluster_t *vkvg_clusters;
+  // vkvg_text_cluster_t  stack_clusters[STACK_ARRAY_LENGTH (vkvg_text_cluster_t)];
+  // int num_clusters;
 
-  if (!crenderer->has_show_text_glyphs || crenderer->do_path)
-    {
-      pango_vkvg_renderer_show_text_glyphs (renderer,
-					     NULL, 0,
-					     glyphs,
-					     NULL, 0,
-					     FALSE,
-					     font,
-					     x, y);
-      return;
-    }
+  // if (!crenderer->has_show_text_glyphs || crenderer->do_path)
+  //   {
+  //     pango_vkvg_renderer_show_text_glyphs (renderer,
+	// 				     NULL, 0,
+	// 				     glyphs,
+	// 				     NULL, 0,
+	// 				     FALSE,
+	// 				     font,
+	// 				     x, y);
+  //     return;
+  //   }
 
-  if (glyphs->num_glyphs > (int) G_N_ELEMENTS (stack_clusters))
-    vkvg_clusters = g_new (vkvg_text_cluster_t, glyphs->num_glyphs);
-  else
-    vkvg_clusters = stack_clusters;
+  // if (glyphs->num_glyphs > (int) G_N_ELEMENTS (stack_clusters))
+  //   vkvg_clusters = g_new (vkvg_text_cluster_t, glyphs->num_glyphs);
+  // else
+  //   vkvg_clusters = stack_clusters;
 
-  num_clusters = 0;
-  if (pango_glyph_item_iter_init_start (&iter, glyph_item, text))
-    {
-      do {
-        int num_bytes, num_glyphs, i;
+  // num_clusters = 0;
+  // if (pango_glyph_item_iter_init_start (&iter, glyph_item, text))
+  //   {
+  //     do {
+  //       int num_bytes, num_glyphs, i;
 
-        num_bytes  = iter.end_index - iter.start_index;
-        num_glyphs = backward ? iter.start_glyph - iter.end_glyph : iter.end_glyph - iter.start_glyph;
+  //       num_bytes  = iter.end_index - iter.start_index;
+  //       num_glyphs = backward ? iter.start_glyph - iter.end_glyph : iter.end_glyph - iter.start_glyph;
 
-	if (num_bytes < 1)
-	  g_warning ("pango_vkvg_renderer_draw_glyph_item: bad cluster has num_bytes %d", num_bytes);
-	if (num_glyphs < 1)
-	  g_warning ("pango_vkvg_renderer_draw_glyph_item: bad cluster has num_glyphs %d", num_glyphs);
+	// if (num_bytes < 1)
+	//   g_warning ("pango_vkvg_renderer_draw_glyph_item: bad cluster has num_bytes %d", num_bytes);
+	// if (num_glyphs < 1)
+	//   g_warning ("pango_vkvg_renderer_draw_glyph_item: bad cluster has num_glyphs %d", num_glyphs);
 
-	/* Discount empty and unknown glyphs */
-	for (i = MIN (iter.start_glyph, iter.end_glyph+1);
-	     i < MAX (iter.start_glyph+1, iter.end_glyph);
-	     i++)
-	  {
-	    PangoGlyphInfo *gi = &glyphs->glyphs[i];
+	// /* Discount empty and unknown glyphs */
+	// for (i = MIN (iter.start_glyph, iter.end_glyph+1);
+	//      i < MAX (iter.start_glyph+1, iter.end_glyph);
+	//      i++)
+	//   {
+	//     PangoGlyphInfo *gi = &glyphs->glyphs[i];
 
-	    if (gi->glyph == PANGO_GLYPH_EMPTY ||
-		gi->glyph & PANGO_GLYPH_UNKNOWN_FLAG)
-	      num_glyphs--;
-	  }
+	//     if (gi->glyph == PANGO_GLYPH_EMPTY ||
+	// 	gi->glyph & PANGO_GLYPH_UNKNOWN_FLAG)
+	//       num_glyphs--;
+	//   }
 
-        vkvg_clusters[num_clusters].num_bytes  = num_bytes;
-        vkvg_clusters[num_clusters].num_glyphs = num_glyphs;
-        num_clusters++;
-      } while (pango_glyph_item_iter_next_cluster (&iter));
-    }
+  //       vkvg_clusters[num_clusters].num_bytes  = num_bytes;
+  //       vkvg_clusters[num_clusters].num_glyphs = num_glyphs;
+  //       num_clusters++;
+  //     } while (pango_glyph_item_iter_next_cluster (&iter));
+  //   }
 
-  pango_vkvg_renderer_show_text_glyphs (renderer,
-					 text + item->offset, item->length,
-					 glyphs,
-					 vkvg_clusters, num_clusters,
-					 backward,
-					 font,
-					 x, y);
+  // pango_vkvg_renderer_show_text_glyphs (renderer,
+	// 				 text + item->offset, item->length,
+	// 				 glyphs,
+	// 				 vkvg_clusters, num_clusters,
+	// 				 backward,
+	// 				 font,
+	// 				 x, y);
 
-  if (vkvg_clusters != stack_clusters)
-    g_free (vkvg_clusters);
+  // if (vkvg_clusters != stack_clusters)
+  //   g_free (vkvg_clusters);
 }
 
 static void
@@ -590,26 +590,26 @@ pango_vkvg_renderer_draw_rectangle (PangoRenderer     *renderer,
 				     int                width,
 				     int                height)
 {
-  PangoVkvgRenderer *crenderer = (PangoVkvgRenderer *) (renderer);
+  // PangoVkvgRenderer *crenderer = (PangoVkvgRenderer *) (renderer);
 
-  if (!crenderer->do_path)
-    {
-      vkvg_save (crenderer->cr);
+  // if (!crenderer->do_path)
+  //   {
+  //     vkvg_save (crenderer->cr);
 
-      set_color (crenderer, part);
-    }
+  //     set_color (crenderer, part);
+  //   }
 
-  vkvg_rectangle (crenderer->cr,
-		   crenderer->x_offset + (double)x / PANGO_SCALE,
-		   crenderer->y_offset + (double)y / PANGO_SCALE,
-		   (double)width / PANGO_SCALE, (double)height / PANGO_SCALE);
+  // vkvg_rectangle (crenderer->cr,
+	// 	   crenderer->x_offset + (double)x / PANGO_SCALE,
+	// 	   crenderer->y_offset + (double)y / PANGO_SCALE,
+	// 	   (double)width / PANGO_SCALE, (double)height / PANGO_SCALE);
 
-  if (!crenderer->do_path)
-    {
-      vkvg_fill (crenderer->cr);
+  // if (!crenderer->do_path)
+  //   {
+  //     vkvg_fill (crenderer->cr);
 
-      vkvg_restore (crenderer->cr);
-    }
+  //     vkvg_restore (crenderer->cr);
+  //   }
 }
 
 static void
@@ -622,33 +622,33 @@ pango_vkvg_renderer_draw_trapezoid (PangoRenderer     *renderer,
 				     double             x12,
 				     double             x22)
 {
-  PangoVkvgRenderer *crenderer = (PangoVkvgRenderer *) (renderer);
-  VkvgContext cr;
-  double x, y;
+  // PangoVkvgRenderer *crenderer = (PangoVkvgRenderer *) (renderer);
+  // VkvgContext cr;
+  // double x, y;
 
-  cr = crenderer->cr;
+  // cr = crenderer->cr;
 
-  vkvg_save (cr);
+  // vkvg_save (cr);
 
-  if (!crenderer->do_path)
-    set_color (crenderer, part);
+  // if (!crenderer->do_path)
+  //   set_color (crenderer, part);
 
-  x = crenderer->x_offset,
-  y = crenderer->y_offset;
-  vkvg_user_to_device_distance (cr, &x, &y);
-  vkvg_identity_matrix (cr);
-  vkvg_translate (cr, x, y);
+  // x = crenderer->x_offset,
+  // y = crenderer->y_offset;
+  // vkvg_user_to_device_distance (cr, &x, &y);
+  // vkvg_identity_matrix (cr);
+  // vkvg_translate (cr, x, y);
 
-  vkvg_move_to (cr, x11, y1_);
-  vkvg_line_to (cr, x21, y1_);
-  vkvg_line_to (cr, x22, y2);
-  vkvg_line_to (cr, x12, y2);
-  vkvg_close_path (cr);
+  // vkvg_move_to (cr, x11, y1_);
+  // vkvg_line_to (cr, x21, y1_);
+  // vkvg_line_to (cr, x22, y2);
+  // vkvg_line_to (cr, x12, y2);
+  // vkvg_close_path (cr);
 
-  if (!crenderer->do_path)
-    vkvg_fill (cr);
+  // if (!crenderer->do_path)
+  //   vkvg_fill (cr);
 
-  vkvg_restore (cr);
+  // vkvg_restore (cr);
 }
 
 /* Draws an error underline that looks like one of:
@@ -731,29 +731,29 @@ pango_vkvg_renderer_draw_error_underline (PangoRenderer *renderer,
 					   int            width,
 					   int            height)
 {
-  PangoVkvgRenderer *crenderer = (PangoVkvgRenderer *) (renderer);
-  VkvgContext cr = crenderer->cr;
+  // PangoVkvgRenderer *crenderer = (PangoVkvgRenderer *) (renderer);
+  // VkvgContext cr = crenderer->cr;
 
-  if (!crenderer->do_path)
-    {
-      vkvg_save (cr);
+  // if (!crenderer->do_path)
+  //   {
+  //     vkvg_save (cr);
 
-      set_color (crenderer, PANGO_RENDER_PART_UNDERLINE);
+  //     set_color (crenderer, PANGO_RENDER_PART_UNDERLINE);
 
-      vkvg_new_path (cr);
-    }
+  //     vkvg_new_path (cr);
+  //   }
 
-  draw_error_underline (cr,
-			crenderer->x_offset + (double)x / PANGO_SCALE,
-			crenderer->y_offset + (double)y / PANGO_SCALE,
-			(double)width / PANGO_SCALE, (double)height / PANGO_SCALE);
+  // draw_error_underline (cr,
+	// 		crenderer->x_offset + (double)x / PANGO_SCALE,
+	// 		crenderer->y_offset + (double)y / PANGO_SCALE,
+	// 		(double)width / PANGO_SCALE, (double)height / PANGO_SCALE);
 
-  if (!crenderer->do_path)
-    {
-      vkvg_fill (cr);
+  // if (!crenderer->do_path)
+  //   {
+  //     vkvg_fill (cr);
 
-      vkvg_restore (cr);
-    }
+  //     vkvg_restore (cr);
+  //   }
 }
 
 static void
@@ -762,36 +762,36 @@ pango_vkvg_renderer_draw_shape (PangoRenderer  *renderer,
 				 int             x,
 				 int             y)
 {
-  PangoVkvgRenderer *crenderer = (PangoVkvgRenderer *) (renderer);
-  VkvgContext cr = crenderer->cr;
-  PangoLayout *layout;
-  PangoVkvgShapeRendererFunc shape_renderer;
-  gpointer                   shape_renderer_data;
-  double base_x, base_y;
+  // PangoVkvgRenderer *crenderer = (PangoVkvgRenderer *) (renderer);
+  // VkvgContext cr = crenderer->cr;
+  // PangoLayout *layout;
+  // PangoVkvgShapeRendererFunc shape_renderer;
+  // gpointer                   shape_renderer_data;
+  // double base_x, base_y;
 
-  layout = pango_renderer_get_layout (renderer);
+  // layout = pango_renderer_get_layout (renderer);
 
-  if (!layout)
-  	return;
+  // if (!layout)
+  // 	return;
 
-  shape_renderer = pango_vkvg_context_get_shape_renderer (pango_layout_get_context (layout),
-							   &shape_renderer_data);
+  // shape_renderer = pango_vkvg_context_get_shape_renderer (pango_layout_get_context (layout),
+	// 						   &shape_renderer_data);
 
-  if (!shape_renderer)
-    return;
+  // if (!shape_renderer)
+  //   return;
 
-  base_x = crenderer->x_offset + (double)x / PANGO_SCALE;
-  base_y = crenderer->y_offset + (double)y / PANGO_SCALE;
+  // base_x = crenderer->x_offset + (double)x / PANGO_SCALE;
+  // base_y = crenderer->y_offset + (double)y / PANGO_SCALE;
 
-  vkvg_save (cr);
-  if (!crenderer->do_path)
-    set_color (crenderer, PANGO_RENDER_PART_FOREGROUND);
+  // vkvg_save (cr);
+  // if (!crenderer->do_path)
+  //   set_color (crenderer, PANGO_RENDER_PART_FOREGROUND);
 
-  vkvg_move_to (cr, base_x, base_y);
+  // vkvg_move_to (cr, base_x, base_y);
 
-  shape_renderer (cr, attr, crenderer->do_path, shape_renderer_data);
+  // shape_renderer (cr, attr, crenderer->do_path, shape_renderer_data);
 
-  vkvg_restore (cr);
+  // vkvg_restore (cr);
 }
 
 static void
@@ -884,85 +884,85 @@ restore_current_point (PangoVkvgRenderer *renderer)
 /* convenience wrappers using the default renderer */
 
 
-static void
-_pango_vkvg_do_glyph_string (VkvgContext cr,
-			      PangoFont        *font,
-			      PangoGlyphString *glyphs,
-			      gboolean          do_path)
-{
-  PangoVkvgRenderer *crenderer = acquire_renderer ();
-  PangoRenderer *renderer = (PangoRenderer *) crenderer;
+// static void
+// _pango_vkvg_do_glyph_string (VkvgContext cr,
+// 			      PangoFont        *font,
+// 			      PangoGlyphString *glyphs,
+// 			      gboolean          do_path)
+// {
+//   PangoVkvgRenderer *crenderer = acquire_renderer ();
+//   PangoRenderer *renderer = (PangoRenderer *) crenderer;
 
-  crenderer->cr = cr;
-  crenderer->do_path = do_path;
-  save_current_point (crenderer);
+//   crenderer->cr = cr;
+//   crenderer->do_path = do_path;
+//   save_current_point (crenderer);
 
-  if (!do_path)
-    {
-      /* unset all part colors, since when drawing just a glyph string,
-       * prepare_run() isn't called.
-       */
+//   if (!do_path)
+//     {
+//       /* unset all part colors, since when drawing just a glyph string,
+//        * prepare_run() isn't called.
+//        */
 
-      pango_renderer_activate (renderer);
+//       pango_renderer_activate (renderer);
 
-      pango_renderer_set_color (renderer, PANGO_RENDER_PART_FOREGROUND, NULL);
-      pango_renderer_set_color (renderer, PANGO_RENDER_PART_BACKGROUND, NULL);
-      pango_renderer_set_color (renderer, PANGO_RENDER_PART_UNDERLINE, NULL);
-      pango_renderer_set_color (renderer, PANGO_RENDER_PART_STRIKETHROUGH, NULL);
-      pango_renderer_set_color (renderer, PANGO_RENDER_PART_OVERLINE, NULL);
-    }
+//       pango_renderer_set_color (renderer, PANGO_RENDER_PART_FOREGROUND, NULL);
+//       pango_renderer_set_color (renderer, PANGO_RENDER_PART_BACKGROUND, NULL);
+//       pango_renderer_set_color (renderer, PANGO_RENDER_PART_UNDERLINE, NULL);
+//       pango_renderer_set_color (renderer, PANGO_RENDER_PART_STRIKETHROUGH, NULL);
+//       pango_renderer_set_color (renderer, PANGO_RENDER_PART_OVERLINE, NULL);
+//     }
 
-  pango_renderer_draw_glyphs (renderer, font, glyphs, 0, 0);
+//   pango_renderer_draw_glyphs (renderer, font, glyphs, 0, 0);
 
-  if (!do_path)
-    {
-      pango_renderer_deactivate (renderer);
-    }
+//   if (!do_path)
+//     {
+//       pango_renderer_deactivate (renderer);
+//     }
 
-  restore_current_point (crenderer);
+//   restore_current_point (crenderer);
 
-  release_renderer (crenderer);
-}
+//   release_renderer (crenderer);
+// }
 
-static void
-_pango_vkvg_do_glyph_item (VkvgContext cr,
-			    const char       *text,
-			    PangoGlyphItem   *glyph_item,
-			    gboolean          do_path)
-{
-  PangoVkvgRenderer *crenderer = acquire_renderer ();
-  PangoRenderer *renderer = (PangoRenderer *) crenderer;
+// static void
+// _pango_vkvg_do_glyph_item (VkvgContext cr,
+// 			    const char       *text,
+// 			    PangoGlyphItem   *glyph_item,
+// 			    gboolean          do_path)
+// {
+//   PangoVkvgRenderer *crenderer = acquire_renderer ();
+//   PangoRenderer *renderer = (PangoRenderer *) crenderer;
 
-  crenderer->cr = cr;
-  crenderer->do_path = do_path;
-  save_current_point (crenderer);
+//   crenderer->cr = cr;
+//   crenderer->do_path = do_path;
+//   save_current_point (crenderer);
 
-  if (!do_path)
-    {
-      /* unset all part colors, since when drawing just a glyph string,
-       * prepare_run() isn't called.
-       */
+//   if (!do_path)
+//     {
+//       /* unset all part colors, since when drawing just a glyph string,
+//        * prepare_run() isn't called.
+//        */
 
-      pango_renderer_activate (renderer);
+//       pango_renderer_activate (renderer);
 
-      pango_renderer_set_color (renderer, PANGO_RENDER_PART_FOREGROUND, NULL);
-      pango_renderer_set_color (renderer, PANGO_RENDER_PART_BACKGROUND, NULL);
-      pango_renderer_set_color (renderer, PANGO_RENDER_PART_UNDERLINE, NULL);
-      pango_renderer_set_color (renderer, PANGO_RENDER_PART_STRIKETHROUGH, NULL);
-      pango_renderer_set_color (renderer, PANGO_RENDER_PART_OVERLINE, NULL);
-    }
+//       pango_renderer_set_color (renderer, PANGO_RENDER_PART_FOREGROUND, NULL);
+//       pango_renderer_set_color (renderer, PANGO_RENDER_PART_BACKGROUND, NULL);
+//       pango_renderer_set_color (renderer, PANGO_RENDER_PART_UNDERLINE, NULL);
+//       pango_renderer_set_color (renderer, PANGO_RENDER_PART_STRIKETHROUGH, NULL);
+//       pango_renderer_set_color (renderer, PANGO_RENDER_PART_OVERLINE, NULL);
+//     }
 
-  pango_renderer_draw_glyph_item (renderer, text, glyph_item, 0, 0);
+//   pango_renderer_draw_glyph_item (renderer, text, glyph_item, 0, 0);
 
-  if (!do_path)
-    {
-      pango_renderer_deactivate (renderer);
-    }
+//   if (!do_path)
+//     {
+//       pango_renderer_deactivate (renderer);
+//     }
 
-  restore_current_point (crenderer);
+//   restore_current_point (crenderer);
 
-  release_renderer (crenderer);
-}
+//   release_renderer (crenderer);
+// }
 
 // static void
 // _pango_vkvg_do_layout_line (VkvgContext cr,
