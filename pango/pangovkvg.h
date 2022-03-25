@@ -6,11 +6,11 @@
 
 G_BEGIN_DECLS
 
+/* Temporary typedefs. */
+
 typedef void vkvg_font_options_t;
 typedef void vkvg_font_face_t;
 typedef void vkvg_scaled_font_t;
-
-/* Niceties currently missing in vkvg. */
 
 typedef enum {
     VKVG_FONT_TYPE_FT,
@@ -98,27 +98,26 @@ typedef void (*PangoVkvgShapeRendererFunc)(VkvgContext     cr,
  * PangoVkvgFontMap
  */
 PANGO_AVAILABLE_IN_1_10
-GType         pango_vkvg_font_map_get_type          (void) G_GNUC_CONST;
+GType pango_vkvg_font_map_get_type(void) G_GNUC_CONST;
 
 PANGO_AVAILABLE_IN_1_10
-PangoFontMap *pango_vkvg_font_map_new(void);
+PangoFontMap * pango_vkvg_font_map_new(void);
 PANGO_AVAILABLE_IN_1_18
-PangoFontMap *pango_vkvg_font_map_new_for_font_type (vkvg_font_type_t fonttype);
+PangoFontMap * pango_vkvg_font_map_new_for_font_type (vkvg_font_type_t fonttype);
 PANGO_AVAILABLE_IN_1_10
-PangoFontMap *pango_vkvg_font_map_get_default (void);
+PangoFontMap * pango_vkvg_font_map_get_default(void);
 PANGO_AVAILABLE_IN_1_22
-void          pango_vkvg_font_map_set_default (PangoVkvgFontMap *fontmap);
+void pango_vkvg_font_map_set_default(PangoVkvgFontMap *fontmap);
 PANGO_AVAILABLE_IN_1_18
-vkvg_font_type_t pango_vkvg_font_map_get_font_type (PangoVkvgFontMap *fontmap);
+vkvg_font_type_t pango_vkvg_font_map_get_font_type(PangoVkvgFontMap *fontmap);
 
 PANGO_AVAILABLE_IN_1_10
-void          pango_vkvg_font_map_set_resolution (PangoVkvgFontMap *fontmap,
-						   						  double             pi);
+void pango_vkvg_font_map_set_resolution(PangoVkvgFontMap *fontmap, double pi);
 PANGO_AVAILABLE_IN_1_10
-double        pango_vkvg_font_map_get_resolution (PangoVkvgFontMap *fontmap);
+double pango_vkvg_font_map_get_resolution(PangoVkvgFontMap *fontmap);
 #ifndef PANGO_DISABLE_DEPRECATED
 PANGO_DEPRECATED_IN_1_22_FOR(pango_font_map_create_context)
-PangoContext *pango_vkvg_font_map_create_context (PangoVkvgFontMap *fontmap);
+PangoContext * pango_vkvg_font_map_create_context(PangoVkvgFontMap *fontmap);
 #endif
 
 /*
@@ -133,8 +132,7 @@ PangoContext *pango_vkvg_font_map_create_context (PangoVkvgFontMap *fontmap);
 /* Update a Pango context for the current state of a vkvg context
  */
 PANGO_AVAILABLE_IN_1_10
-void         pango_vkvg_update_context (VkvgContext cr,
-					 PangoContext *context);
+void pango_vkvg_update_context(VkvgContext cr, PangoContext *context);
 
 // PANGO_AVAILABLE_IN_1_10
 // void                        pango_vkvg_context_set_font_options (PangoContext               *context,
@@ -162,7 +160,7 @@ PangoContext *pango_vkvg_create_context(VkvgContext cr);
 PANGO_AVAILABLE_IN_ALL
 PangoLayout  *pango_vkvg_create_layout(VkvgContext cr);
 PANGO_AVAILABLE_IN_1_10
-void         pango_vkvg_update_layout(VkvgContext cr, PangoLayout *layout);
+void pango_vkvg_update_layout(VkvgContext cr, PangoLayout *layout);
 
 /*
  * Rendering
@@ -179,8 +177,7 @@ void         pango_vkvg_update_layout(VkvgContext cr, PangoLayout *layout);
 // void pango_vkvg_show_layout_line  (VkvgContext cr,
 // 				    PangoLayoutLine  *line);
 PANGO_AVAILABLE_IN_1_10
-void pango_vkvg_show_layout       (VkvgContext cr,
-				    PangoLayout      *layout);
+void pango_vkvg_show_layout(VkvgContext cr, PangoLayout *layout);
 
 // PANGO_AVAILABLE_IN_1_14
 // void pango_vkvg_show_error_underline (VkvgContext cr,
