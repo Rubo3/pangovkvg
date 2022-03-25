@@ -23,7 +23,7 @@
 #define __PANGOVKVG_FC_H__
 
 #include <pango/pangofc-fontmap.h>
-#include <pango/pangovkvg.h>
+#include "pangovkvg.h"
 
 G_BEGIN_DECLS
 
@@ -45,4 +45,3 @@ GType pango_vkvg_fc_font_map_get_type (void) G_GNUC_CONST;
 G_END_DECLS
 
 #endif /* __PANGOVKVG_FC_H__ */
-
