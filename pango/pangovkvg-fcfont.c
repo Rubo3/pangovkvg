@@ -22,16 +22,16 @@
 #include "config.h"
 
 /* Freetype has undefined macros in its header */
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wundef"
-#include <vkvg-ft.h>
-#pragma GCC diagnostic pop
+// #pragma GCC diagnostic push
+// #pragma GCC diagnostic ignored "-Wundef"
+// #include <vkvg-ft.h>
+// #pragma GCC diagnostic pop
 
-#include "pangofc-fontmap-private.h"
+#include "pango/pangofc-fontmap-private.h"
+#include "pango/pangofc-private.h"
+#include "pango/pango-impl-utils.h"
 #include "pangovkvg-private.h"
 #include "pangovkvg-fc-private.h"
-#include "pangofc-private.h"
-#include "pango-impl-utils.h"
 
 #include <hb-ot.h>
 #include <freetype/ftmm.h>
