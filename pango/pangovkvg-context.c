@@ -21,9 +21,9 @@
 
 #include "config.h"
 
+#include "pango/pango-impl-utils.h"
 #include "pangovkvg.h"
 #include "pangovkvg-private.h"
-#include "pango-impl-utils.h"
 
 #include <string.h>
 
@@ -195,13 +195,13 @@ pango_vkvg_update_context (VkvgContext ctx,
  *
  * Since: 1.10
  */
-// void
-// pango_vkvg_context_set_resolution (PangoContext *context,
-// 				    double        dpi)
-// {
-//   PangoVkvgContextInfo *info = get_context_info (context, TRUE);
-//   info->dpi = dpi;
-// }
+void
+pango_vkvg_context_set_resolution (PangoContext *context,
+				    double        dpi)
+{
+  PangoVkvgContextInfo *info = get_context_info (context, TRUE);
+  info->dpi = dpi;
+}
 
 /**
  * pango_vkvg_context_get_resolution:
@@ -216,16 +216,16 @@ pango_vkvg_update_context (VkvgContext ctx,
  *
  * Since: 1.10
  */
-// double
-// pango_vkvg_context_get_resolution (PangoContext *context)
-// {
-//   PangoVkvgContextInfo *info = get_context_info (context, FALSE);
+double
+pango_vkvg_context_get_resolution (PangoContext *context)
+{
+  PangoVkvgContextInfo *info = get_context_info (context, FALSE);
 
-//   if (info)
-//     return info->dpi;
-//   else
-//     return -1.0;
-// }
+  if (info)
+    return info->dpi;
+  else
+    return -1.0;
+}
 
 /**
  * pango_vkvg_context_set_font_options:
