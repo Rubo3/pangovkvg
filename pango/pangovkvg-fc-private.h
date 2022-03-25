@@ -22,8 +22,8 @@
 #ifndef __PANGOVKVG_FC_PRIVATE_H__
 #define __PANGOVKVG_FC_PRIVATE_H__
 
-#include <pango/pangofc-fontmap-private.h>
-#include <pango/pangovkvg-fc.h>
+#include "pango/pangofc-fontmap-private.h"
+#include "pangovkvg-fc.h"
 
 G_BEGIN_DECLS
 
