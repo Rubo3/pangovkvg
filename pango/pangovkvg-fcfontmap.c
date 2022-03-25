@@ -21,12 +21,12 @@
 #include "config.h"
 
 /* Freetype has undefined macros in its headers */
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wundef"
-#include <vkvg-ft.h>
-#pragma GCC diagnostic pop
+// #pragma GCC diagnostic push
+// #pragma GCC diagnostic ignored "-Wundef"
+// #include <vkvg-ft.h>
+// #pragma GCC diagnostic pop
 
-#include "pangofc-fontmap-private.h"
+#include "pango/pangofc-fontmap-private.h"
 #include "pangovkvg.h"
 #include "pangovkvg-private.h"
 #include "pangovkvg-fc-private.h"
@@ -100,18 +100,18 @@ G_DEFINE_TYPE_WITH_CODE (PangoVkvgFcFontMap, pango_vkvg_fc_font_map, PANGO_TYPE_
 
 static void
 pango_vkvg_fc_font_map_fontset_key_substitute (PangoFcFontMap    *fcfontmap G_GNUC_UNUSED,
-						PangoFcFontsetKey *fontkey,
-						FcPattern         *pattern)
+						                                   PangoFcFontsetKey *fontkey,
+						                                   FcPattern         *pattern)
 {
-  FcConfigSubstitute (pango_fc_font_map_get_config (fcfontmap), pattern, FcMatchPattern);
+  // FcConfigSubstitute (pango_fc_font_map_get_config (fcfontmap), pattern, FcMatchPattern);
 
-  if (fcfontmap->substitute_func)
-    fcfontmap->substitute_func (pattern, fcfontmap->substitute_data);
-  if (fontkey)
-    vkvg_ft_font_options_substitute (pango_fc_fontset_key_get_context_key (fontkey),
-				      pattern);
+  // if (fcfontmap->substitute_func)
+  //   fcfontmap->substitute_func (pattern, fcfontmap->substitute_data);
+  // if (fontkey)
+  //   vkvg_ft_font_options_substitute (pango_fc_fontset_key_get_context_key (fontkey),
+	// 			      pattern);
 
-  FcDefaultSubstitute (pattern);
+  // FcDefaultSubstitute (pattern);
 }
 
 static double
@@ -138,21 +138,21 @@ static gconstpointer
 pango_vkvg_fc_font_map_context_key_get (PangoFcFontMap *fcfontmap G_GNUC_UNUSED,
 					 PangoContext   *context)
 {
-  return _pango_vkvg_context_get_merged_font_options (context);
+  return NULL; // _pango_vkvg_context_get_merged_font_options (context);
 }
 
 static gpointer
 pango_vkvg_fc_font_map_context_key_copy (PangoFcFontMap *fcfontmap G_GNUC_UNUSED,
 					  gconstpointer   key)
 {
-  return vkvg_font_options_copy (key);
+  return NULL; // vkvg_font_options_copy (key);
 }
 
 static void
 pango_vkvg_fc_font_map_context_key_free (PangoFcFontMap *fcfontmap G_GNUC_UNUSED,
 					  gpointer        key)
 {
-  vkvg_font_options_destroy (key);
+  // vkvg_font_options_destroy (key);
 }
 
 
@@ -160,7 +160,7 @@ static guint32
 pango_vkvg_fc_font_map_context_key_hash (PangoFcFontMap *fcfontmap G_GNUC_UNUSED,
 					  gconstpointer        key)
 {
-  return (guint32)vkvg_font_options_hash (key);
+  return 0; // (guint32)vkvg_font_options_hash (key);
 }
 
 static gboolean
@@ -168,15 +168,14 @@ pango_vkvg_fc_font_map_context_key_equal (PangoFcFontMap *fcfontmap G_GNUC_UNUSE
 					   gconstpointer   key_a,
 					   gconstpointer   key_b)
 {
-  return vkvg_font_options_equal (key_a, key_b);
+  return FALSE; // vkvg_font_options_equal (key_a, key_b);
 }
 
 static PangoFcFont *
 pango_vkvg_fc_font_map_create_font (PangoFcFontMap *fcfontmap,
 				     PangoFcFontKey *key)
 {
-  return _pango_vkvg_fc_font_new ((PangoVkvgFcFontMap *) (fcfontmap),
-				   key);
+  return NULL; // _pango_vkvg_fc_font_new((PangoVkvgFcFontMap *) (fcfontmap), key);
 }
 
 static void
