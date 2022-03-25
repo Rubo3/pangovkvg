@@ -22,13 +22,14 @@
 #ifndef __PANGOVKVG_PRIVATE_H__
 #define __PANGOVKVG_PRIVATE_H__
 
-#include <pango/pangovkvg.h>
 #include <pango/pango-renderer.h>
+#include "pangovkvg.h"
 
 G_BEGIN_DECLS
 
 
-#define PANGO_VKVG_FONT_MAP_GET_IFACE(obj)  (G_TYPE_INSTANCE_GET_INTERFACE ((obj), PANGO_TYPE_VKVG_FONT_MAP, PangoVkvgFontMapIface))
+#define PANGO_VKVG_FONT_MAP_GET_IFACE(obj) \
+  (G_TYPE_INSTANCE_GET_INTERFACE ((obj), PANGO_TYPE_VKVG_FONT_MAP, PangoVkvgFontMapIface))
 
 typedef struct _PangoVkvgFontMapIface PangoVkvgFontMapIface;
 
@@ -36,11 +37,10 @@ struct _PangoVkvgFontMapIface
 {
   GTypeInterface g_iface;
 
-  void           (*set_resolution) (PangoVkvgFontMap *fontmap,
-				    double             dpi);
+  void           (*set_resolution) (PangoVkvgFontMap *fontmap, double dpi);
   double         (*get_resolution) (PangoVkvgFontMap *fontmap);
 
-  // vkvg_font_type_t (*get_font_type) (PangoVkvgFontMap *fontmap);
+  vkvg_font_type_t (*get_font_type) (PangoVkvgFontMap *fontmap);
 };
 
 
@@ -69,7 +69,7 @@ struct _PangoVkvgFontPrivateScaledFontData
 {
   vkvg_matrix_t font_matrix;
   vkvg_matrix_t ctm;
-  // vkvg_font_options_t *options;
+  vkvg_font_options_t *options;
 };
 
 struct _PangoVkvgFontPrivate
@@ -78,7 +78,7 @@ struct _PangoVkvgFontPrivate
 
   PangoVkvgFontPrivateScaledFontData *data;
 
-  // vkvg_scaled_font_t *scaled_font;
+  vkvg_scaled_font_t *scaled_font;
   PangoVkvgFontHexBoxInfo *hbi;
 
   gboolean is_hinted;
@@ -94,32 +94,29 @@ struct _PangoVkvgFontIface
 {
   GTypeInterface g_iface;
 
-  // vkvg_font_face_t *(*create_font_face) (PangoVkvgFont *cfont);
-  PangoFontMetrics *(*create_base_metrics_for_context) (PangoVkvgFont *cfont,
-							PangoContext   *context);
+  vkvg_font_face_t *(*create_font_face) (PangoVkvgFont *cfont);
+  PangoFontMetrics *(*create_base_metrics_for_context) (PangoVkvgFont *cfont, PangoContext *context);
 
   gssize cf_priv_offset;
 };
 
-gboolean _pango_vkvg_font_install (PangoFont *font,
-				    VkvgContext cr);
-PangoFontMetrics * _pango_vkvg_font_get_metrics (PangoFont     *font,
-						  PangoLanguage *language);
+gboolean _pango_vkvg_font_install (PangoFont *font, VkvgContext cr);
+PangoFontMetrics * _pango_vkvg_font_get_metrics (PangoFont *font, PangoLanguage *language);
 PangoVkvgFontHexBoxInfo *_pango_vkvg_font_get_hex_box_info (PangoVkvgFont *cfont);
 
 void _pango_vkvg_font_private_initialize (PangoVkvgFontPrivate      *cf_priv,
-					   PangoVkvgFont             *font,
-					   PangoGravity                gravity,
-					   // const vkvg_font_options_t *font_options,
-					   const PangoMatrix          *pango_ctm,
-					   const vkvg_matrix_t       *font_matrix);
+                                          PangoVkvgFont             *font,
+                                          PangoGravity               gravity,
+                                          const vkvg_font_options_t *font_options,
+                                          const PangoMatrix         *pango_ctm,
+                                          const vkvg_matrix_t       *font_matrix);
 void _pango_vkvg_font_private_finalize (PangoVkvgFontPrivate *cf_priv);
-// vkvg_scaled_font_t *_pango_vkvg_font_private_get_scaled_font (PangoVkvgFontPrivate *cf_priv);
+vkvg_scaled_font_t *_pango_vkvg_font_private_get_scaled_font (PangoVkvgFontPrivate *cf_priv);
 gboolean _pango_vkvg_font_private_is_metrics_hinted (PangoVkvgFontPrivate *cf_priv);
 void _pango_vkvg_font_private_get_glyph_extents (PangoVkvgFontPrivate *cf_priv,
-						  PangoGlyph             glyph,
-						  PangoRectangle        *ink_rect,
-						  PangoRectangle        *logical_rect);
+                                                 PangoGlyph             glyph,
+                                                 PangoRectangle        *ink_rect,
+                                                 PangoRectangle        *logical_rect);
 
 #define PANGO_TYPE_VKVG_RENDERER            (pango_vkvg_renderer_get_type())
 #define PANGO_VKVG_RENDERER(object)         (G_TYPE_CHECK_INSTANCE_CAST ((object), PANGO_TYPE_VKVG_RENDERER, PangoVkvgRenderer))
@@ -131,7 +128,7 @@ _PANGO_EXTERN
 GType pango_vkvg_renderer_get_type    (void) G_GNUC_CONST;
 
 
-// const vkvg_font_options_t *_pango_vkvg_context_get_merged_font_options (PangoContext *context);
+const vkvg_font_options_t *_pango_vkvg_context_get_merged_font_options (PangoContext *context);
 
 
 G_END_DECLS
