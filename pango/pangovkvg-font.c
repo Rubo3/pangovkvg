@@ -60,9 +60,9 @@ _pango_vkvg_font_private_scaled_font_data_create (void)
 //     }
 // }
 
-// vkvg_scaled_font_t *
-// _pango_vkvg_font_private_get_scaled_font (PangoVkvgFontPrivate *cf_priv)
-// {
+vkvg_scaled_font_t *
+_pango_vkvg_font_private_get_scaled_font (PangoVkvgFontPrivate *cf_priv)
+{
 //   vkvg_font_face_t *font_face;
 
 //   if (G_LIKELY (cf_priv->scaled_font))
@@ -133,7 +133,8 @@ _pango_vkvg_font_private_scaled_font_data_create (void)
 //   cf_priv->data = NULL;
 
 //   return cf_priv->scaled_font;
-// }
+  return NULL;
+}
 
 /**
  * pango_vkvg_font_get_scaled_font:
