@@ -12,7 +12,7 @@ I am reimplementing few functions at a time, at the moment:
 
 and all their dependencies.
 
-Currently it doesn't compile, I get undefined references on `pango_fc_font_map_*` functions. If you want to try it out and figure why, clone the [Pango repository](https://gitlab.gnome.org/GNOME/pango) and set up its build directory with Meson; then include `pangovkvg.h` in a source file and use the functions listed above. To compile it, add the Pango build directory to the include directories, as it contains the `config.h` file currently needed by the `pangovkvg` source files (as of now it's hardcoded); then link with Vkvg and Pango as usual (e.g. with the result of `pkgconf --cflags --libs pango`).
+If you want to help, I have provided an example Makefile, put it at the root of your project directory. It expects two directories to be present: a copy of the [Pango repository](https://gitlab.gnome.org/GNOME/pango) and a copy of this repository. You also need [Meson](https://mesonbuild.com) as it creates a `config.h` file, needed by `pangovkvg` sources. Compiler flags and libraries are determined with [pkg-config](https://www.freedesktop.org/wiki/Software/pkg-config).
 
 ## License
 
