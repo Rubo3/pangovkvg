@@ -68,7 +68,7 @@ pango_vkvg_fc_font_create_font_face (PangoVkvgFont *cfont)
 {
   PangoFcFont *fcfont = (PangoFcFont *) (cfont);
 
-  return vkvg_ft_font_face_create_for_pattern (fcfont->font_pattern);
+  return NULL; // vkvg_ft_font_face_create_for_pattern (fcfont->font_pattern);
 }
 
 static PangoFontMetrics *
@@ -138,7 +138,7 @@ pango_vkvg_fc_font_lock_face (PangoFcFont *font)
   if (G_UNLIKELY (!scaled_font))
     return NULL;
 
-  return vkvg_ft_scaled_font_lock_face (scaled_font);
+  return NULL; // vkvg_ft_scaled_font_lock_face (scaled_font);
 }
 
 static void
@@ -150,7 +150,7 @@ pango_vkvg_fc_font_unlock_face (PangoFcFont *font)
   if (G_UNLIKELY (!scaled_font))
     return;
 
-  vkvg_ft_scaled_font_unlock_face (scaled_font);
+  // vkvg_ft_scaled_font_unlock_face (scaled_font);
 }
 
 static void
