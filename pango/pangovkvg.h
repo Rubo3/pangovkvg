@@ -123,11 +123,11 @@ PangoContext * pango_vkvg_font_map_create_context(PangoVkvgFontMap *fontmap);
 /*
  * PangoVkvgFont
  */
-// PANGO_AVAILABLE_IN_1_18
-// GType         pango_vkvg_font_get_type               (void) G_GNUC_CONST;
+PANGO_AVAILABLE_IN_1_18
+GType pango_vkvg_font_get_type(void) G_GNUC_CONST;
 
-// PANGO_AVAILABLE_IN_1_18
-// vkvg_scaled_font_t *pango_vkvg_font_get_scaled_font (PangoVkvgFont *font);
+PANGO_AVAILABLE_IN_1_18
+vkvg_scaled_font_t *pango_vkvg_font_get_scaled_font(PangoVkvgFont *font);
 
 /* Update a Pango context for the current state of a vkvg context
  */
@@ -135,10 +135,9 @@ PANGO_AVAILABLE_IN_1_10
 void pango_vkvg_update_context(VkvgContext cr, PangoContext *context);
 
 // PANGO_AVAILABLE_IN_1_10
-// void                        pango_vkvg_context_set_font_options (PangoContext               *context,
-// 								  const vkvg_font_options_t *options);
+// void pango_vkvg_context_set_font_options(PangoContext *context, const vkvg_font_options_t *options);
 // PANGO_AVAILABLE_IN_1_10
-// const vkvg_font_options_t *pango_vkvg_context_get_font_options (PangoContext               *context);
+// const vkvg_font_options_t *pango_vkvg_context_get_font_options(PangoContext *context);
 
 // PANGO_AVAILABLE_IN_1_10
 void pango_vkvg_context_set_resolution(PangoContext *context, double dpi);
@@ -146,10 +145,10 @@ void pango_vkvg_context_set_resolution(PangoContext *context, double dpi);
 double pango_vkvg_context_get_resolution(PangoContext *context);
 
 // PANGO_AVAILABLE_IN_1_18
-// void                        pango_vkvg_context_set_shape_renderer (PangoContext                *context,
-// 								    PangoVkvgShapeRendererFunc  func,
-// 								    gpointer                     data,
-// 								    GDestroyNotify               dnotify);
+// void pango_vkvg_context_set_shape_renderer (PangoContext              *context,
+// 								               PangoVkvgShapeRendererFunc func,
+// 								               gpointer                   data,
+// 								               GDestroyNotify             dnotify);
 PANGO_AVAILABLE_IN_1_18
 PangoVkvgShapeRendererFunc pango_vkvg_context_get_shape_renderer(PangoContext *context, gpointer *data);
 
