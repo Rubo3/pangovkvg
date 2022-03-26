@@ -12,7 +12,7 @@ I am reimplementing few functions at a time, at the moment:
 
 and all their dependencies.
 
-If you want to help, I have provided an example Makefile, put it at the root of your project directory. It expects two directories to be present: a copy of the [Pango repository](https://gitlab.gnome.org/GNOME/pango) and a copy of this repository. You also need [Meson](https://mesonbuild.com) as it creates a `config.h` file, needed by `pangovkvg` sources. Compiler flags and libraries are determined with [pkg-config](https://www.freedesktop.org/wiki/Software/pkg-config), and the libraries required by `pangocairo` are parsed with `awk`.
+If you want to help, I have provided an example Makefile, put it at the root directory of your project. It expects two directories to be present: a copy of the [Pango repository](https://gitlab.gnome.org/GNOME/pango) and a copy of this repository. You also need [Meson](https://mesonbuild.com) as it creates a `config.h` file, needed by `pangovkvg` sources. Compiler flags and libraries are determined with [pkg-config](https://www.freedesktop.org/wiki/Software/pkg-config), and the libraries required by `pangocairo` are parsed with `awk`.
 
 ## License
 
