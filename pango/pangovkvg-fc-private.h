@@ -42,4 +42,3 @@ PangoFcFont *_pango_vkvg_fc_font_new (PangoVkvgFcFontMap *cffontmap,
 G_END_DECLS
 
 #endif /* __PANGOVKVG_FC_PRIVATE_H__ */
-
